@@ -73,7 +73,8 @@
         #sendoTable th:nth-child(3n), #sendoTable td:nth-child(3n) { border-right: 2px solid #333; }
         #sendoTable thead tr:last-child th { border-bottom: 2px solid #333; }
         
-        #sendoBody tr:nth-child(4n) td { border-bottom: 2px solid #333; }
+        /* 1日あたり5行に変更したため、5行ごとに太線 */
+        #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #333; }
 
         /* =========================================
            2B. 島ゴンドラ清掃表
@@ -145,33 +146,35 @@
         .dip-footer { top: 260mm; right: 30mm; font-size: 18pt; line-height: 2; text-align: right; }
 
         /* =========================================
-           5. 印刷設定（A4・1枚収め最適化）
+           5. 印刷設定（ギリギリ1枚に広げる最適化）
         ========================================= */
         @media print {
-            /* 余白を10mmに設定し、ブラウザのヘッダーフッター干渉を最小化 */
-            @page { size: A4 portrait; margin: 10mm; }
+            @page { size: A4 portrait; margin: 10mm; } /* 余白を10mmに固定 */
             body { padding: 0; margin: 0; background-color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .header, .tabs, .controls, .action-btn, .print-control { display: none !important; }
             .tab-content { display: none !important; }
             .tab-content.active { display: block !important; padding: 0; box-shadow: none; border: none; overflow: visible; }
             
-            /* --- タブ1: 鮮度チェック表の1枚収め調整 --- */
-            #sendoTable { width: 100% !important; margin: 0 !important; font-size: 11px; border: 2px solid #000; }
-            #sendoTable th, #sendoTable td { height: 18px !important; padding: 2px !important; } /* 高さを圧縮 */
+            /* --- タブ1: 鮮度チェック表 --- */
+            /* 全体の高さを265mmに強制し、A4の上下をギリギリまで使い切る */
+            #sendoTable { height: 265mm !important; width: 100% !important; margin: 0 !important; font-size: 11px; border: 2px solid #000; }
+            #sendoTable th { height: auto !important; } /* ヘッダーはなりゆき */
+            /* 行を1日5行（全55行）にした上で、高さを均等にストレッチ */
+            #sendoTable td { height: 17px !important; padding: 1px 2px !important; }
             .title-cell { font-size: 16px !important; padding-bottom: 5px !important; margin: 0 !important; }
             
-            /* --- タブ2: 島ゴンドラ清掃表の1枚収め調整 --- */
+            /* --- タブ2: 島ゴンドラ清掃表 --- */
             #seiso > div:first-child { font-size: 16px !important; margin-bottom: 5px !important; }
             #seisoTable { width: 100% !important; border: 2px solid #000; margin: 0; }
             #seisoTable td { border: 1px solid #333; padding: 4px !important; font-size: 11px !important; }
             
-            /* 行の高さを全体的に縮小してはみ出しを防止 */
-            .gondola-row { height: 45px !important; } 
-            .gondola-row-tall { height: 60px !important; } 
-            .gondola-row-short { height: 25px !important; }
+            /* 1枚にちょうど収まりつつ、最大限広くなるように調整 */
+            .gondola-row { height: 58px !important; } 
+            .gondola-row-tall { height: 78px !important; } 
+            .gondola-row-short { height: 35px !important; }
             
-            .instruction-box { border: 1px solid #000; border-left: 5px solid #000; background-color: #fff !important; margin-top: 8px !important; padding: 10px 15px !important; font-size: 12px !important; line-height: 1.5 !important; }
-            .instruction-box h4 { color: #000; margin: 0 0 5px 0 !important; font-size: 14px !important; }
+            .instruction-box { border: 1px solid #000; border-left: 5px solid #000; background-color: #fff !important; margin-top: 15px !important; padding: 15px 20px !important; font-size: 13px !important; line-height: 1.6 !important; }
+            .instruction-box h4 { color: #000; margin: 0 0 5px 0 !important; font-size: 15px !important; }
             
             /* --- タブ3: 入社書類セット --- */
             .doc-page { box-shadow: none; border: none; margin: 0; width: 100%; box-sizing: border-box; padding: 5mm 10mm !important; page-break-after: always; }
@@ -521,7 +524,8 @@
                 let d2Str = getDisplayDate(year, month, i + 11);
                 let d3Str = getDisplayDate(year, month, i + 22);
 
-                for (let row = 0; row < 4; row++) {
+                /* 💡 修正箇所: 1日あたり4行から「5行」に変更しました */
+                for (let row = 0; row < 5; row++) {
                     let td1 = (row === 0) ? d1Str : ""; let td4 = (row === 0) ? d2Str : ""; let td7 = (row === 0) ? d3Str : "";
                     html += `<tr>
                         <td contenteditable="true" data-key="sendo_${val}_${i}_${row}_1">${td1}</td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_2"></td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_3"></td>
