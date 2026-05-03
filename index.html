@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>店舗管理ツール（清掃表アップグレード版）</title>
+    <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           1. 共通設定・画面レイアウト
+        ========================================= */
+        :root {
+            --primary-color: #008000;
+            --bg-color: #f4f5f7;
+            --border-color: #000;
+        }
+        body {
+            font-family: "MS UI Gothic", "ＭＳ Ｐゴシック", sans-serif;
+            margin: 0; padding: 20px;
+            background-color: var(--bg-color);
+            color: #333;
+        }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        
+        .tabs { 
+            display: flex; 
+            flex-wrap: nowrap; 
+            gap: 8px; 
+            margin-bottom: 20px; 
+            overflow-x: auto; 
+            padding-bottom: 5px; 
+        }
+        .tab-btn { 
+            padding: 10px 15px; 
+            font-size: 14px; 
+            font-weight: bold; 
+            border: 2px solid var(--primary-color); 
+            background: white; 
+            color: var(--primary-color); 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            white-space: nowrap; 
+            flex-shrink: 0; 
+        }
+        .tab-btn.active { background: var(--primary-color); color: white; }
+        .tab-content { display: none; background: white; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow-x: auto; }
+        .tab-content.active { display: block; }
+        .action-btn { padding: 10px 20px; font-size: 15px; font-weight: bold; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; }
+        .action-btn.save { background: #ff6600; }
+        
+        .controls { margin-bottom: 10px; font-size: 16px; font-weight: bold;}
+        .controls select { padding: 8px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; margin: 0 5px; cursor: pointer; }
+
+        td[contenteditable="true"]:focus, .fill-blank:focus, .doc-sign-input:focus, p[contenteditable="true"]:focus, div[contenteditable="true"]:focus, span[contenteditable="true"]:focus {
+            outline: 2px solid #1890ff; outline-offset: -2px; background-color: #e6f7ff;
+        }
+
+        table.op-table { border-collapse: collapse; width: 100%; min-width: 900px; table-layout: fixed; font-size: 12px; }
+        table.op-table th, table.op-table td { border: 1px solid var(--border-color); padding: 4px; word-wrap: break-word; }
+        .center-cell { text-align: center !important; vertical-align: middle !important; }
+        .no-border { border: none !important; }
+
+        /* =========================================
+           2A. 鮮度チェック表
+        ========================================= */
+        #sendoTable { border: 2px solid #333; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        #sendoTable th, #sendoTable td { text-align: center; vertical-align: middle; height: 26px; border: 1px solid #aaa; }
+        #sendoTable th { background: #f0f0f0; }
+        .title-cell { font-size: 16px; font-weight: bold; border: none !important; text-align: left !important; background: transparent !important; }
+        
+        #sendoTable th:nth-child(3n), #sendoTable td:nth-child(3n) { border-right: 2px solid #333; }
+        #sendoTable thead tr:last-child th { border-bottom: 2px solid #333; }
+        
+        #sendoBody tr:nth-child(4n) td { border-bottom: 2px solid #333; }
+
+        /* =========================================
+           2B. 島ゴンドラ清掃表
+        ========================================= */
+        #seisoTable { border: 2px solid #333; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        #seisoTable td { text-align: left; vertical-align: top; font-size: 13px; font-weight: bold; border: 1px solid #888; padding: 6px; }
+        
+        .gondola-row { height: 60px; } 
+        .gondola-row-tall { height: 80px; } 
+        .gondola-row-short { height: 40px; }
+
+        .bg-ice { background-color: #e3f2fd !important; }       
+        .bg-chilled { background-color: #e8f5e9 !important; }   
+        .bg-register { background-color: #fff3e0 !important; }  
+        .bg-aisle { background-color: #fafafa !important; border: 1px dashed #ddd !important; color: #999; text-align: center !important; vertical-align: middle !important; font-weight: normal !important; }
+
+        .instruction-box {
+            background-color: #fffde7; border: 1px solid #ffd54f; border-left: 5px solid #ffca28;
+            padding: 15px 20px; margin-top: 20px; border-radius: 4px; line-height: 1.8; font-size: 14px;
+        }
+        .instruction-box h4 { margin: 0 0 10px 0; color: #f57f17; font-size: 16px; }
+        .instruction-box ul { margin: 0; padding-left: 20px; }
+        .instruction-box li { margin-bottom: 5px; }
+
+        /* =========================================
+           3. 入社手続書類セット
+        ========================================= */
+        .doc-wrapper { background-color: var(--bg-color); padding: 0; box-shadow: none; }
+        .doc-page {
+            font-family: "MS Mincho", "ＭＳ 明朝", serif; background: white; margin: 0 auto 30px auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #ccc; max-width: 800px; box-sizing: border-box;
+            padding: 20px 40px 40px 40px; color: #000; line-height: 1.6; font-size: 15px; transition: opacity 0.3s;
+        }
+        .doc-page.exclude-print { opacity: 0.4; }
+        .print-control { text-align: right; padding-bottom: 15px; margin-bottom: 20px; border-bottom: 1px dashed #ccc; font-family: sans-serif; }
+        .print-control label { cursor: pointer; font-weight: bold; font-size: 16px; color: #333; }
+        .print-control input { transform: scale(1.5); margin-right: 10px; cursor: pointer; }
+
+        .doc-title { text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 20px; letter-spacing: 5px; }
+        .doc-title-line { text-decoration: underline; text-underline-offset: 4px; }
+        .doc-to { font-size: 16px; margin-bottom: 20px; }
+        .doc-date { text-align: right; margin-bottom: 10px; }
+        .doc-body { margin-bottom: 30px; }
+        .doc-body p { margin: 10px 0; }
+        .fill-blank { display: inline-block; min-width: 40px; border-bottom: 1px solid #000; text-align: center; padding: 0 5px; cursor: text; min-height: 20px; }
+        .doc-sign { margin-left: auto; width: 75%; font-size: 15px; }
+        .doc-sign-row { display: flex; margin-bottom: 15px; align-items: flex-end; }
+        .doc-sign-label { width: 120px; }
+        .doc-sign-input { flex: 1; border-bottom: 1px solid #000; min-height: 24px; padding-left: 5px; cursor: text; }
+        .doc-table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        .doc-table th, .doc-table td { border: 1px solid #000; padding: 10px; vertical-align: top; }
+        .doc-table th { width: 25%; text-align: center; font-weight: normal; }
+
+        /* =========================================
+           4. 卒業証書
+        ========================================= */
+        .diploma-print-area {
+            font-family: 'Yuji Syuku', "HGP行書体", "HG行書体", serif; width: 210mm; height: 297mm;
+            margin: 0 auto; position: relative; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            border: 1px dashed #ccc; overflow: hidden; color: #000;
+        }
+        .brush-text { position: absolute; white-space: nowrap; font-weight: bold; }
+        .editable-line { border-bottom: 1px dotted #ccc; display: inline-block; min-width: 50px; cursor: text; font-family: 'Yuji Syuku', serif; }
+        .dip-number { top: 20mm; right: 20mm; font-size: 16pt; text-align: right; }
+        .dip-title { top: 40mm; left: 0; width: 100%; text-align: center; font-size: 48pt; letter-spacing: 20mm; }
+        .dip-name { top: 85mm; left: 30mm; font-size: 26pt; }
+        .dip-main { top: 120mm; left: 35mm; font-size: 18pt; line-height: 2.8; letter-spacing: 1pt; text-align: left; }
+        
+        /* 💡 修正箇所: 卒業証書の日付と署名欄をそれぞれ20mm下に移動 */
+        .dip-date { top: 240mm; left: 30mm; font-size: 16pt; }
+        .dip-footer { top: 260mm; right: 30mm; font-size: 18pt; line-height: 2; text-align: right; }
+
+        /* =========================================
+           5. 印刷設定
+        ========================================= */
+        @media print {
+            @page { size: A4 portrait; margin: 0; }
+            body { padding: 0; background-color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .header, .tabs, .controls, .action-btn, .print-control { display: none !important; }
+            .tab-content { display: none !important; }
+            .tab-content.active { display: block !important; padding: 0; box-shadow: none; border: none; }
+            
+            #sendoTable { margin: 10mm; width: calc(100% - 20mm) !important; font-size: 10px; }
+            
+            #seiso { padding: 10mm !important; }
+            #seisoTable { width: 100% !important; border: 2px solid #000; margin: 0; }
+            #seisoTable td { border: 1px solid #333; }
+            .instruction-box { border: 1px solid #000; border-left: 5px solid #000; background-color: #fff !important; margin-top: 10px; }
+            .instruction-box h4 { color: #000; }
+            
+            .doc-page { box-shadow: none; border: none; margin: 0; width: 210mm; min-height: 297mm; box-sizing: border-box; padding: 15mm 20mm; page-break-after: always; }
+            .doc-page:last-child { page-break-after: auto; }
+            .exclude-print { display: none !important; }
+            .diploma-print-area { border: none; box-shadow: none; margin: 0; }
+            .editable-line { border-bottom: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ヘッダー -->
+    <div class="header">
+        <h2>店舗管理ツール</h2>
+        <div>
+            <button class="action-btn save" onclick="saveData()">💾 データを保存</button>
+            <button class="action-btn" onclick="window.print()">🖨️ A4縦で印刷 / 出力</button>
+        </div>
+    </div>
+
+    <!-- タブメニュー -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('sendo')">非デイリー鮮度チェック</button>
+        <button class="tab-btn" onclick="switchTab('seiso')">島ゴンドラ清掃表</button>
+        <button class="tab-btn" onclick="switchTab('onboarding')">入社手続書類 (5点セット)</button>
+        <button class="tab-btn" onclick="switchTab('diploma')">卒業証書 (証書直接印刷)</button>
+    </div>
+
+    <!-- タブ1: 非デイリー鮮度チェック表 -->
+    <div id="sendo" class="tab-content active">
+        <div class="controls">
+            対象年月を選択: 
+            <select id="yearSelect" onchange="generateSendoTable()"></select> 年
+            <select id="monthSelect" onchange="generateSendoTable()"></select> 月
+        </div>
+        <table id="sendoTable" class="op-table">
+            <colgroup><col style="width: 5%;"> <col style="width: 21%;"> <col style="width: 7%;"><col style="width: 5%;"> <col style="width: 21%;"> <col style="width: 7%;"><col style="width: 5%;"> <col style="width: 21%;"> <col style="width: 8%;"></colgroup>
+            <thead>
+                <tr><th colspan="9" class="title-cell" style="text-align: center !important; font-size: 18px; padding-bottom: 10px;">非デイリー鮮度チェック確認表</th></tr>
+                <tr><th>日付</th><th>商品（ゴンドラ番号）</th><th>賞味期限</th><th>日付</th><th>商品（ゴンドラ番号）</th><th>賞味期限</th><th>日付</th><th>商品（ゴンドラ番号）</th><th>賞味期限</th></tr>
+            </thead>
+            <tbody id="sendoBody"></tbody>
+        </table>
+    </div>
+
+    <!-- タブ2: 島ゴンドラ清掃表 -->
+    <div id="seiso" class="tab-content">
+        <div style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 15px; letter-spacing: 2px;">
+            ゴンドラ定期清掃表 (非デイリー鮮度チェック確認表)
+        </div>
+        <table id="seisoTable" class="op-table">
+            <colgroup>
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 100s -->
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 200s -->
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 300s -->
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 3.1%;"> <!-- 400s/Ice -->
+                <col style="width: 8.5%;"> <!-- Chilled -->
+            </colgroup>
+            <tbody id="seisoBody">
+                
+                <tr style="height: 10px;"><td class="no-border" colspan="12"></td><td rowspan="3" class="center-cell bg-register" contenteditable="true" data-key="s_2_13">H/C</td></tr>
+                <tr class="gondola-row-short"><td colspan="11" class="center-cell bg-register" contenteditable="true" data-key="s_3_1">レジカウンター</td><td class="no-border"></td></tr>
+                <tr style="height: 15px;"><td colspan="12" class="no-border"></td></tr>
+                
+                <tr class="gondola-row">
+                    <td colspan="2" contenteditable="true" data-key="s_5_1">101 (日)</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" contenteditable="true" data-key="s_5_4">201 (月)</td><td class="no-border bg-aisle"></td>
+                    <td rowspan="3" colspan="2" class="center-cell bg-ice" contenteditable="true" data-key="s_5_7">アイスケース①</td><td class="no-border bg-aisle"></td>
+                    <td rowspan="3" colspan="2" class="center-cell bg-ice" contenteditable="true" data-key="s_5_10">アイスケース②</td><td class="no-border bg-aisle"></td>
+                    <td class="bg-chilled" contenteditable="true" data-key="s_5_13">米飯</td>
+                </tr>
+                <tr class="gondola-row-tall">
+                    <td contenteditable="true" data-key="s_6_1">102 (日)</td><td contenteditable="true" data-key="s_6_2">108 (日)</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_6_4">202 (月)</td><td contenteditable="true" data-key="s_6_5">208 (火)</td><td class="no-border bg-aisle"></td>
+                    <td class="no-border bg-aisle"></td><td class="no-border bg-aisle"></td>
+                    <td class="bg-chilled" contenteditable="true" data-key="s_6_13">チルド①</td>
+                </tr>
+                <tr class="gondola-row-tall">
+                    <td contenteditable="true" data-key="s_7_1">103</td><td contenteditable="true" data-key="s_7_2">107 (日)</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_7_4">203 (月)</td><td contenteditable="true" data-key="s_7_5">207 (火)</td><td class="no-border bg-aisle"></td>
+                    <td class="no-border bg-aisle"></td><td class="no-border bg-aisle"></td>
+                    <td class="bg-chilled" contenteditable="true" data-key="s_7_13">チルド②</td>
+                </tr>
+                <tr class="gondola-row-tall">
+                    <td contenteditable="true" data-key="s_8_1">104</td><td contenteditable="true" data-key="s_8_2">106</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_8_4">204 (月)</td><td contenteditable="true" data-key="s_8_5">206 (火)</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" class="center-cell bg-aisle" contenteditable="true" data-key="s_8_7">通路</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" class="center-cell bg-aisle" contenteditable="true" data-key="s_8_10">通路</td><td class="no-border bg-aisle"></td>
+                    <td class="bg-chilled" contenteditable="true" data-key="s_8_13">チルド③</td>
+                </tr>
+                <tr class="gondola-row">
+                    <td colspan="2" contenteditable="true" data-key="s_9_1">105</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" contenteditable="true" data-key="s_9_4">205 (火)</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_9_7">301 (金)</td><td contenteditable="true" data-key="s_9_8">311</td>
+                    <td rowspan="4" class="center-cell" contenteditable="true" data-key="s_9_9" style="writing-mode: vertical-rl; padding:5px; font-size:11px;">ペストリー売場最下段は掃除機で</td>
+                    <td rowspan="4" colspan="2" class="center-cell bg-ice" contenteditable="true" data-key="s_9_10">アイスケース③</td><td class="no-border bg-aisle"></td>
+                    <td class="bg-chilled" contenteditable="true" data-key="s_9_13">チルド④</td>
+                </tr>
+                <tr class="gondola-row-short">
+                    <td colspan="2" class="bg-aisle" contenteditable="true" data-key="s_10_1">通路</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" class="bg-aisle" contenteditable="true" data-key="s_10_4">通路</td><td class="no-border bg-aisle"></td>
+                    <td rowspan="2" contenteditable="true" data-key="s_10_7">302 (金)</td><td rowspan="2" contenteditable="true" data-key="s_10_8">310</td><td class="no-border bg-aisle"></td>
+                    <td rowspan="2" class="bg-chilled" contenteditable="true" data-key="s_10_13">チルド⑤</td>
+                </tr>
+                <tr class="gondola-row">
+                    <td colspan="2" contenteditable="true" data-key="s_11_1">109 (月)</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" contenteditable="true" data-key="s_11_4">209 (水)</td><td class="no-border bg-aisle"></td><td class="no-border bg-aisle"></td>
+                </tr>
+                <tr class="gondola-row-tall">
+                    <td contenteditable="true" data-key="s_12_1">110</td><td contenteditable="true" data-key="s_12_2">116</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_12_4">210 (水)</td><td contenteditable="true" data-key="s_12_5">216 (木)</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_12_7">303 (金)</td><td contenteditable="true" data-key="s_12_8">309 (土)</td><td class="no-border bg-aisle"></td>
+                    <td class="bg-chilled" contenteditable="true" data-key="s_12_13">チルド⑥</td>
+                </tr>
+                <tr class="gondola-row-tall">
+                    <td contenteditable="true" data-key="s_13_1">111</td><td contenteditable="true" data-key="s_13_2">115</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_13_4">211 (水)</td><td contenteditable="true" data-key="s_13_5">215 (木)</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_13_7">304 (金)</td><td contenteditable="true" data-key="s_13_8">308 (土)</td><td class="no-border bg-aisle"></td>
+                    <td class="center-cell" contenteditable="true" data-key="s_13_10">401</td><td class="center-cell bg-chilled" contenteditable="true" data-key="s_13_11">中島チルド</td><td class="no-border bg-aisle"></td>
+                    <td class="bg-chilled" contenteditable="true" data-key="s_13_13">チルド⑦</td>
+                </tr>
+                <tr class="gondola-row-tall">
+                    <td contenteditable="true" data-key="s_14_1">112</td><td contenteditable="true" data-key="s_14_2">114</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_14_4">212 (水)</td><td contenteditable="true" data-key="s_14_5">214 (木)</td><td class="no-border bg-aisle"></td>
+                    <td contenteditable="true" data-key="s_14_7">305 (金)</td><td contenteditable="true" data-key="s_14_8">307 (土)</td><td class="no-border bg-aisle"></td>
+                    <td class="center-cell" contenteditable="true" data-key="s_14_10">402</td><td class="center-cell bg-chilled" contenteditable="true" data-key="s_14_11">中島チルド</td><td class="no-border bg-aisle"></td>
+                    <td rowspan="2" class="bg-chilled" contenteditable="true" data-key="s_14_13">チルド⑧</td>
+                </tr>
+                <tr class="gondola-row">
+                    <td colspan="2" contenteditable="true" data-key="s_15_1">113 (日)</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" contenteditable="true" data-key="s_15_4">213 (木)</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" contenteditable="true" data-key="s_15_7">306 (土)</td><td class="no-border bg-aisle"></td>
+                    <td colspan="2" class="center-cell" contenteditable="true" data-key="s_15_10">403</td><td class="no-border bg-aisle"></td>
+                </tr>
+                <tr style="height: 10px;"><td colspan="12" class="no-border"></td><td rowspan="2" class="center-cell bg-chilled" contenteditable="true" data-key="s_16_13">壁面 (土)</td></tr>
+                <tr><td colspan="12" class="no-border"></td></tr>
+            </tbody>
+        </table>
+
+        <div class="instruction-box">
+            <h4>🧹 ゴンドラ清掃の手順</h4>
+            <ul>
+                <li>島ゴンドラは101から順に実施し、ゴンドラ毎に <strong>上段 ⇒ 下段</strong> の順で清掃してください。</li>
+                <li>オリコンを使用し、商品を売場から移動させます。毛ハタキで埃を落としてから、<strong>乾拭き</strong>を実施してください。</li>
+                <li>清掃を実施したゴンドラのマス目に、<strong>必ず「日付」と「名前」を記入</strong>してください。</li>
+                <li>シフト毎に <strong>２ゴンドラ以上の清掃</strong> が目安です。</li>
+                <li>丁寧に商品を扱い、綺麗に売場へ戻すよう心がけてください。</li>
+            </ul>
+            <p style="margin: 10px 0 0 0; color: #d32f2f; font-weight: bold;">◎ ゴンドラ番号の横のカッコ（曜日）は、非デイリー鮮度チェックを実施する曜日です。</p>
+        </div>
+    </div>
+
+    <!-- タブ3: 入社手続書類 -->
+    <div id="onboarding" class="tab-content doc-wrapper">
+        <div class="doc-page">
+            <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
+            <div class="doc-title">労 働 条 件 通 uns知 書</div>
+            <div style="font-size: 18px; margin-bottom: 20px;">
+                <span class="fill-blank" contenteditable="true" data-key="doc1_emp_name_top" style="min-width: 250px;"></span> 殿
+            </div>
+            <div class="doc-date">令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy1"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm1"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd1"></span> 日</div>
+            <table class="doc-table">
+                <tr><th>雇用契約期間</th><td>令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy2"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm2"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd2"></span> 日 より　期間の定め無し</td></tr>
+                <tr><th>雇用形態</th><td><span class="fill-blank" contenteditable="true" data-key="doc1_emp" style="min-width: 150px;">パートタイマー ・ 正社員</span></td></tr>
+                <tr><th>就業場所</th><td>セブンイレブン尾張旭晴丘町池上店<br>但し、業務の都合により勤務地を変更する場合がある</td></tr>
+                <tr><th>仕事内容</th><td>コンビニエンスストアにおける接客、販売業務</td></tr>
+                <tr><th>就業時間</th><td>シフト表による<br>※ただし、業務上就業時間・休憩時間を変更する場合がある。</td></tr>
+                <tr><th>所定外労働</th><td>有り</td></tr>
+                <tr><th>休日及び休暇</th><td>シフト制、その他会社が定めた日<br>年次有給休暇あり　※就業規則の定めによる</td></tr>
+                <tr><th>賃金</th><td>基本賃金　　時給 <span class="fill-blank" contenteditable="true" data-key="doc1_wage" style="min-width: 80px;"></span> 円<br>時間外手当　法定通り</td></tr>
+                <tr><th>賃金の支払</th><td>毎月15日締切り、当月25日支払<br>賃金支払時に控除する費用（所得税、雇用保険等）</td></tr>
+                <tr><th>賞与</th><td>なし</td></tr>
+                <tr><th>退職金</th><td>なし</td></tr>
+                <tr><th>退職に関する事項</th><td>定年は満65歳とし、定年に達したときをもって自然退職とする<br>自己の都合により退職しようとするときは、1ヶ月前までに届け出ること</td></tr>
+                <tr><th>その他</th><td>上記以外の労働条件の詳細については、就業規則または、関係諸法令を参考にその都度会社が取り決めるものとする。</td></tr>
+            </table>
+            <div style="text-align: right; margin-top: 30px; font-size: 16px;">（使用者）　セブンイレブン尾張旭晴丘町池上店<br>蟹江　明雄　　印</div>
+        </div>
+
+        <div class="doc-page">
+            <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
+            <div class="doc-title"><span class="doc-title-line">誓　　約　　書</span></div>
+            <div class="doc-to">セブンーイレブン<br>尾張旭晴丘町池上　店<br>オーナー　蟹江明雄　殿</div>
+            <div class="doc-body">
+                <p>私は、セブンーイレブン店の社会的使命をよく理解し、その実現のため誠心誠意職務にはげむとともに、業務命令を遵守します。</p>
+                <p>私は、前項の貴店理念に基づく、『お店の基本ルール』の内容についての説明を受け、理解すると同時にその内容に則した行動遵守を誓います。</p>
+                <p>本誓約書に違反し、その違反によって貴店に与えた損害について、賠償の責を負うことに意義ありません。</p>
+            </div>
+            <div class="doc-date">２０ <span class="fill-blank" contenteditable="true" data-key="doc2_y"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc2_m"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc2_d"></span> 日</div>
+            <div class="doc-sign">
+                <div class="doc-sign-row"><div class="doc-sign-label">(本人) 住所</div><div class="doc-sign-input" contenteditable="true" data-key="doc2_addr"></div></div>
+                <div class="doc-sign-row"><div class="doc-sign-label" style="text-align: right; padding-right: 15px;">氏名</div><div class="doc-sign-input" contenteditable="true" data-key="doc2_name"></div><div style="margin-left: 10px;">印</div></div>
+            </div>
+        </div>
+
+        <div class="doc-page">
+            <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
+            <div class="doc-title"><span class="doc-title-line">就　業　承　諾　書</span></div>
+            <div class="doc-to">セブンーイレブン<br>尾張旭晴丘町池上　店<br>オーナー　蟹江明雄　殿</div>
+            <div class="doc-body"><p>私は、親権者(後見人)として、貴店において下記の者が、記載内容のとおり就業することを承諾致します。</p></div>
+            <table class="doc-table">
+                <tr><th>就業者氏名</th><td><span class="fill-blank" contenteditable="true" data-key="doc3_emp_name" style="width: 50%;"></span> 年齢 <span class="fill-blank" contenteditable="true" data-key="doc3_emp_age"></span> 才</td></tr>
+                <tr><th>業務内容</th><td>レジ接客、清掃、検品、発注、帳票作成等<br>販売に関わる作業全般</td></tr>
+                <tr><th>就業時間及び<br>勤務時間</th><td>上記就業者及び貴店(貴殿)が『労働契約書』で取交わした内容のとおり</td></tr>
+            </table>
+            <div class="doc-date">２０ <span class="fill-blank" contenteditable="true" data-key="doc3_y"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc3_m"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc3_d"></span> 日</div>
+            <div class="doc-sign">
+                <div class="doc-sign-row"><div class="doc-sign-label">(後見人) 住所</div><div class="doc-sign-input" contenteditable="true" data-key="doc3_addr"></div></div>
+                <div class="doc-sign-row"><div class="doc-sign-label" style="text-align: right; padding-right: 15px;">電話番号</div><div class="doc-sign-input" contenteditable="true" data-key="doc3_tel1" style="flex: 0.3;"></div><span style="margin: 0 5px;">―</span><div class="doc-sign-input" contenteditable="true" data-key="doc3_tel2" style="flex: 0.3;"></div><span style="margin: 0 5px;">―</span><div class="doc-sign-input" contenteditable="true" data-key="doc3_tel3" style="flex: 0.4;"></div></div>
+                <div class="doc-sign-row"><div class="doc-sign-label" style="text-align: right; padding-right: 15px;">氏名</div><div class="doc-sign-input" contenteditable="true" data-key="doc3_name"></div><div style="margin-left: 10px;">印</div></div>
+                <div class="doc-sign-row"><div class="doc-sign-label" style="text-align: right; padding-right: 15px;">本人との続柄</div><div class="doc-sign-input" contenteditable="true" data-key="doc3_rel"></div></div>
+            </div>
+        </div>
+
+        <div class="doc-page">
+            <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
+            <div class="doc-title"><span class="doc-title-line">身　元　保　証　契　約　書</span></div>
+            <div class="doc-to">セブンーイレブン<br>尾張旭晴丘町池上　店<br>オーナー　蟹江明雄　殿</div>
+            <div class="doc-sign" style="width: 100%; margin-bottom: 20px;">
+                <div class="doc-sign-row"><div class="doc-sign-label" style="width: 80px;">(本人) 氏名</div><div class="doc-sign-input" contenteditable="true" data-key="doc4_emp_name" style="max-width: 300px;"></div></div>
+            </div>
+            <div class="doc-body">
+                <p>このたび貴店に採用された上記の者について、私は貴店に対し次のとおり身元を保証いたします。</p>
+                <ol>
+                    <li>本契約の有効期限は、5年間とします。</li>
+                    <li>労働契約にしたがい、本人の就業期間中、金銭、小切手等有価証券類の保管、出納等、責任ある業務に就かせることを了承致します。</li>
+                    <li>本人が貴店との労働契約に対し、故意、または過失によって万一貴店に損害を与えた場合は、本人と連携してただちに貴店の受けた損害を賠償します。</li>
+                </ol>
+            </div>
+            <div class="doc-date">２０ <span class="fill-blank" contenteditable="true" data-key="doc4_y"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc4_m"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc4_d"></span> 日</div>
+            <div class="doc-sign">
+                <div class="doc-sign-row"><div class="doc-sign-label">(身元保証人) 住所</div><div class="doc-sign-input" contenteditable="true" data-key="doc4_addr"></div></div>
+                <div class="doc-sign-row"><div class="doc-sign-label" style="text-align: right; padding-right: 15px;">電話番号</div><div class="doc-sign-input" contenteditable="true" data-key="doc4_tel1" style="flex: 0.3;"></div><span style="margin: 0 5px;">―</span><div class="doc-sign-input" contenteditable="true" data-key="doc4_tel2" style="flex: 0.3;"></div><span style="margin: 0 5px;">―</span><div class="doc-sign-input" contenteditable="true" data-key="doc4_tel3" style="flex: 0.4;"></div></div>
+                <div class="doc-sign-row"><div class="doc-sign-label" style="text-align: right; padding-right: 15px;">氏名</div><div class="doc-sign-input" contenteditable="true" data-key="doc4_name"></div><div style="margin-left: 10px;">印</div></div>
+                <div class="doc-sign-row"><div class="doc-sign-label" style="text-align: right; padding-right: 15px;">職業</div><div class="doc-sign-input" contenteditable="true" data-key="doc4_job" style="flex: 0.5;"></div><div class="doc-sign-label" style="width: 90px; text-align: right; padding-right: 15px;">本人との関係</div><div class="doc-sign-input" contenteditable="true" data-key="doc4_rel" style="flex: 0.5;"></div></div>
+            </div>
+        </div>
+
+        <div class="doc-page">
+            <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
+            <div style="font-size: 18px; margin-bottom: 30px; font-weight: bold; border-bottom: 1px solid #000; display: inline-block; padding-bottom: 5px;">
+                <span class="fill-blank" contenteditable="true" data-key="doc5_name" style="min-width: 150px; border:none; border-bottom:1px solid #999;"></span> さんの保護者様へ
+            </div>
+            <div class="doc-body" style="line-height: 2.2;">
+                <p>お世話になります、セブンイレブン尾張旭晴丘町池上店の蟹江と申します。<br>この度は、大切なお子様を当店舗での従業員として採用させて頂きました。<br>これから責任を持って教育に当たらせて頂きますのでどうぞ宜しくお願い致します。</p>
+                <p>さて、セブンイレブンでは現在『近くて便利』という標語を掲げ、<br>近隣の方々にいつも便利に利用して頂けるように商品の販売だけでなく、<br>様々なサービスの提供を行っております。<br>その中で、お子様に関してはレジでの接客だけではなく、商品の管理や発注業務、<br>清掃業務や商品のお勧めなど多岐にわたる業務を実施して頂きます。<br>これらの職務に関しては、新たな職体験の一つというだけでなく、今後の社会人生活<br>においての重要な指針にもなると考えております。</p>
+                <p>時には難しい場面に遭遇して壁に当たる事もあると思いますので、そのような時には<br>是非とも励ましてあげて下さい。<br>又、お子様が当店で頑張って職務をしている事については陰ながら応援して頂けたら、<br>幸いでございます。<br>もちろん学業が最優先ではありますので、出来る限りのバックアップをさせて頂きます。<br>気になる点などがありましたら、いつでもご意見を頂きますようお願い申し上げます。</p>
+                <p>末筆ながら皆様のご健康とご多幸を心よりお祈り申し上げます。</p>
+            </div>
+            <div style="text-align: right; margin-top: 50px; font-size: 16px;">
+                セブンイレブン尾張旭晴丘町池上店<br><br><br><br>
+            </div>
+        </div>
+    </div>
+
+    <!-- タブ4: 卒業証書 -->
+    <div id="diploma" class="tab-content" style="background-color: var(--bg-color);">
+        <p style="text-align:center; color: #d93025; font-weight:bold;">※画面上の点線枠は印刷位置のガイドです。印刷時は「文字だけ」が印字されます。</p>
+        <div class="diploma-print-area">
+            
+            <div class="brush-text dip-number" contenteditable="true" data-key="d_num">第 711 号</div>
+            <div class="brush-text dip-title">卒業証書</div>
+            <div class="brush-text dip-name">
+                <span class="editable-line" contenteditable="true" data-key="d_name">（スタッフ氏名を入力）</span> 殿
+            </div>
+
+            <div class="brush-text dip-main">
+                <div contenteditable="true" data-key="d_t1">あなたはセブンイレブン尾張旭晴丘町池上店において</div>
+                <div contenteditable="true" data-key="d_t2">長きにわたり学業と両立しながら誠実に勤務され</div>
+                <div contenteditable="true" data-key="d_t3">店舗の発展に大きく貢献されました</div>
+                <div contenteditable="true" data-key="d_t4">この度 卒業を迎えられるにあたり その功績を称え</div>
+                <div contenteditable="true" data-key="d_t5">感謝の意を表するとともに これを賞します</div>
+                <div contenteditable="true" data-key="d_t6">今後のご健勝とご活躍を心よりお祈り申し上げます</div>
+            </div>
+
+            <div class="brush-text dip-date">
+                令和 <span class="editable-line" contenteditable="true" data-key="d_y"></span> 年 
+                <span class="editable-line" contenteditable="true" data-key="d_m"></span> 月 
+                <span class="editable-line" contenteditable="true" data-key="d_d"></span> 日
+            </div>
+
+            <div class="brush-text dip-footer">
+                セブンイレブン尾張旭晴丘町池上店<br>
+                オーナー 蟹江 明雄
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function togglePrint(checkbox) {
+            const page = checkbox.closest('.doc-page');
+            if (checkbox.checked) {
+                page.classList.remove('exclude-print');
+            } else {
+                page.classList.add('exclude-print');
+            }
+        }
+
+        function initDateSelect() {
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth() + 1;
+
+            for(let y = currentYear - 2; y <= currentYear + 3; y++) {
+                const option = document.createElement('option'); option.value = y; option.text = y;
+                if(y === currentYear) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+
+            for(let m = 1; m <= 12; m++) {
+                const option = document.createElement('option'); option.value = String(m).padStart(2, '0'); option.text = m;
+                if(m === currentMonth) option.selected = true;
+                monthSelect.appendChild(option);
+            }
+            
+            generateSendoTable();
+        }
+
+        function getDisplayDate(year, month, dayOffset) {
+            let lastDay = new Date(year, month, 0).getDate();
+            if (dayOffset > lastDay) return "";
+            let d = new Date(year, month - 1, dayOffset);
+            return `${d.getMonth() + 1}/${d.getDate()}`;
+        }
+
+        function generateSendoTable() {
+            const year = parseInt(document.getElementById('yearSelect').value, 10);
+            const month = parseInt(document.getElementById('monthSelect').value, 10);
+            const val = `${year}-${String(month).padStart(2, '0')}`;
+            const tbody = document.getElementById('sendoBody');
+            let html = '';
+            
+            for(let i = 1; i <= 11; i++) {
+                let d1Str = getDisplayDate(year, month, i);
+                let d2Str = getDisplayDate(year, month, i + 11);
+                let d3Str = getDisplayDate(year, month, i + 22);
+
+                for (let row = 0; row < 4; row++) {
+                    let td1 = (row === 0) ? d1Str : ""; let td4 = (row === 0) ? d2Str : ""; let td7 = (row === 0) ? d3Str : "";
+                    html += `<tr>
+                        <td contenteditable="true" data-key="sendo_${val}_${i}_${row}_1">${td1}</td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_2"></td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_3"></td>
+                        <td contenteditable="true" data-key="sendo_${val}_${i}_${row}_4">${td4}</td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_5"></td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_6"></td>
+                        <td contenteditable="true" data-key="sendo_${val}_${i}_${row}_7">${td7}</td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_8"></td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_9"></td>
+                    </tr>`;
+                }
+            }
+            tbody.innerHTML = html;
+            loadData();
+        }
+
+        function saveData() {
+            document.querySelectorAll('[contenteditable="true"], .fill-blank, .doc-sign-input').forEach(cell => {
+                if(cell.dataset.key) { localStorage.setItem(cell.dataset.key, cell.innerText || cell.innerHTML); }
+            });
+            alert('全タブのデータを保存しました。');
+        }
+
+        function loadData() {
+            document.querySelectorAll('[contenteditable="true"], .fill-blank, .doc-sign-input').forEach(cell => {
+                if(cell.dataset.key) {
+                    const saved = localStorage.getItem(cell.dataset.key);
+                    if(saved !== null && saved !== "") { 
+                        if(cell.classList.contains('fill-blank') || cell.classList.contains('doc-sign-input') || cell.classList.contains('editable-line') || cell.tagName === 'P' || cell.tagName === 'DIV'){
+                            cell.innerText = saved;
+                        } else { cell.innerHTML = saved; }
+                    }
+                }
+            });
+        }
+
+        window.onload = function() { initDateSelect(); loadData(); };
+    </script>
+</body>
+</html>
