@@ -169,19 +169,17 @@
             .instruction-box { border: 1px solid #000; border-left: 5px solid #000; background-color: #fff !important; margin-top: 20px !important; padding: 15px 20px !important; font-size: 13px !important; line-height: 1.6 !important; }
             .instruction-box h4 { color: #000; margin: 0 0 5px 0 !important; font-size: 15px !important; }
             
-            /* --- タブ3: 入社書類セット（1枚に収める・途切れないようにする） --- */
+            /* --- タブ3: 入社書類セット --- */
             .doc-page { 
                 box-shadow: none; border: none; margin: 0; width: 100%; box-sizing: border-box; 
                 padding: 5mm 10mm !important; page-break-after: always; 
-                font-size: 13px !important; /* 💡 はみ出し防止のためフォントサイズを縮小 */
-                line-height: 1.4 !important; /* 💡 行間を少し詰める */
+                font-size: 13px !important; 
+                line-height: 1.4 !important; 
             }
             .doc-page:last-child { page-break-after: auto; }
             .exclude-print { display: none !important; }
-            
-            /* 💡 各要素の余白を詰めて確実に1ページに入れる */
             .doc-title { font-size: 18px !important; margin-bottom: 10px !important; }
-            .doc-title + div { margin-bottom: 10px !important; font-size: 15px !important; } /* 「〜殿」の部分 */
+            .doc-title + div { margin-bottom: 10px !important; font-size: 15px !important; }
             .doc-to { margin-bottom: 10px !important; }
             .doc-body { margin-bottom: 15px !important; }
             .doc-body p { margin: 4px 0 !important; }
@@ -189,8 +187,9 @@
             .doc-table th, .doc-table td { padding: 4px 6px !important; }
             .doc-sign-row { margin-bottom: 8px !important; }
             
-            /* --- タブ4: 卒業証書 --- */
-            .diploma-print-area { border: none; box-shadow: none; margin: 0; }
+            /* --- タブ4: 卒業証書（2ページ目白紙対策） --- */
+            /* 高さをA4用紙（余白込み）内に収まる275mmに制限し、溢れた文字はそのまま表示させる */
+            .diploma-print-area { border: none; box-shadow: none; margin: 0; width: 100% !important; height: 275mm !important; overflow: visible !important; }
             .editable-line { border-bottom: none; }
         }
     </style>
@@ -281,11 +280,9 @@
                     <td colspan="2" contenteditable="true" data-key="s_9_1">105</td><td class="no-border bg-aisle"></td>
                     <td colspan="2" contenteditable="true" data-key="s_9_4">205 (火)</td><td class="no-border bg-aisle"></td>
                     <td contenteditable="true" data-key="s_9_7">301 (金)</td>
-                    <!-- 💡 修正箇所: 311の枠内に「ペストリー」の文言を移動 -->
                     <td contenteditable="true" data-key="s_9_8" style="position:relative;">
                         311<div style="font-size:10px; color:#555; line-height:1.2; margin-top:3px; font-weight:normal;">ペストリー<br>最下段は<br>掃除機で</div>
                     </td>
-                    <!-- テーブルレイアウトを崩さないための通路スペーサー（旧文言列の代わり） -->
                     <td rowspan="4" class="no-border bg-aisle"></td>
                     <td rowspan="4" colspan="2" class="center-cell bg-ice" contenteditable="true" data-key="s_9_10">アイスケース③</td><td class="no-border bg-aisle"></td>
                     <td class="bg-chilled" contenteditable="true" data-key="s_9_13">チルド④</td>
@@ -294,7 +291,6 @@
                     <td colspan="2" class="bg-aisle" contenteditable="true" data-key="s_10_1">通路</td><td class="no-border bg-aisle"></td>
                     <td colspan="2" class="bg-aisle" contenteditable="true" data-key="s_10_4">通路</td><td class="no-border bg-aisle"></td>
                     <td rowspan="2" contenteditable="true" data-key="s_10_7">302 (金)</td>
-                    <!-- 💡 修正箇所: 310の枠内にも「ペストリー」の文言を追加 -->
                     <td rowspan="2" contenteditable="true" data-key="s_10_8">
                         310<div style="font-size:10px; color:#555; line-height:1.2; margin-top:3px; font-weight:normal;">ペストリー<br>最下段は<br>掃除機で</div>
                     </td>
@@ -455,7 +451,8 @@
 
     <!-- タブ4: 卒業証書 -->
     <div id="diploma" class="tab-content" style="background-color: var(--bg-color);">
-        <p style="text-align:center; color: #d93025; font-weight:bold;">※画面上の点線枠は印刷位置のガイドです。印刷時は「文字だけ」が印字されます。</p>
+        <!-- 💡 修正箇所: 印刷時に非表示にするため class="exclude-print" を追加 -->
+        <p class="exclude-print" style="text-align:center; color: #d93025; font-weight:bold;">※画面上の点線枠は印刷位置のガイドです。印刷時は「文字だけ」が印字されます。</p>
         <div class="diploma-print-area">
             
             <div class="brush-text dip-number" contenteditable="true" data-key="d_num">第 711 号</div>
