@@ -135,7 +135,8 @@
             border: 1px dashed #ccc; overflow: hidden; color: #000;
         }
         .brush-text { position: absolute; white-space: nowrap; font-weight: bold; }
-        .editable-line { border-bottom: 1px dotted #ccc; display: inline-block; min-width: 50px; cursor: text; font-family: 'Yuji Syuku', serif; }
+        /* 💡 修正箇所: text-align: center; を追加して数字を真ん中寄せにしました */
+        .editable-line { border-bottom: 1px dotted #ccc; display: inline-block; min-width: 50px; text-align: center; cursor: text; font-family: 'Yuji Syuku', serif; }
         .dip-number { top: 20mm; right: 20mm; font-size: 16pt; text-align: right; }
         .dip-title { top: 40mm; left: 0; width: 100%; text-align: center; font-size: 48pt; letter-spacing: 20mm; }
         .dip-name { top: 85mm; left: 30mm; font-size: 26pt; }
@@ -187,8 +188,7 @@
             .doc-table th, .doc-table td { padding: 4px 6px !important; }
             .doc-sign-row { margin-bottom: 8px !important; }
             
-            /* --- タブ4: 卒業証書（2ページ目白紙対策） --- */
-            /* 高さをA4用紙（余白込み）内に収まる275mmに制限し、溢れた文字はそのまま表示させる */
+            /* --- タブ4: 卒業証書 --- */
             .diploma-print-area { border: none; box-shadow: none; margin: 0; width: 100% !important; height: 275mm !important; overflow: visible !important; }
             .editable-line { border-bottom: none; }
         }
@@ -451,7 +451,6 @@
 
     <!-- タブ4: 卒業証書 -->
     <div id="diploma" class="tab-content" style="background-color: var(--bg-color);">
-        <!-- 💡 修正箇所: 印刷時に非表示にするため class="exclude-print" を追加 -->
         <p class="exclude-print" style="text-align:center; color: #d93025; font-weight:bold;">※画面上の点線枠は印刷位置のガイドです。印刷時は「文字だけ」が印字されます。</p>
         <div class="diploma-print-area">
             
