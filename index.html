@@ -135,7 +135,6 @@
             border: 1px dashed #ccc; overflow: hidden; color: #000;
         }
         .brush-text { position: absolute; white-space: nowrap; font-weight: bold; }
-        /* 💡 修正箇所: text-align: center; を追加して数字を真ん中寄せにしました */
         .editable-line { border-bottom: 1px dotted #ccc; display: inline-block; min-width: 50px; text-align: center; cursor: text; font-family: 'Yuji Syuku', serif; }
         .dip-number { top: 20mm; right: 20mm; font-size: 16pt; text-align: right; }
         .dip-title { top: 40mm; left: 0; width: 100%; text-align: center; font-size: 48pt; letter-spacing: 20mm; }
@@ -196,7 +195,6 @@
 </head>
 <body>
 
-    <!-- ヘッダー -->
     <div class="header">
         <h2>店舗管理ツール</h2>
         <div>
@@ -205,7 +203,6 @@
         </div>
     </div>
 
-    <!-- タブメニュー -->
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('sendo')">非デイリー鮮度チェック</button>
         <button class="tab-btn" onclick="switchTab('seiso')">島ゴンドラ清掃表</button>
@@ -213,7 +210,6 @@
         <button class="tab-btn" onclick="switchTab('diploma')">卒業証書 (証書直接印刷)</button>
     </div>
 
-    <!-- タブ1: 非デイリー鮮度チェック表 -->
     <div id="sendo" class="tab-content active">
         <div class="controls">
             対象年月を選択: 
@@ -230,19 +226,13 @@
         </table>
     </div>
 
-    <!-- タブ2: 島ゴンドラ清掃表 -->
     <div id="seiso" class="tab-content">
         <div style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 15px; letter-spacing: 2px;">
             ゴンドラ定期清掃表 (非デイリー鮮度チェック確認表)
         </div>
         <table id="seisoTable" class="op-table">
             <colgroup>
-                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 100s -->
-                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 200s -->
-                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 300s -->
-                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 3.1%;"> <!-- 400s/Ice -->
-                <col style="width: 8.5%;"> <!-- Chilled -->
-            </colgroup>
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 3.1%;"> <col style="width: 8.5%;"> </colgroup>
             <tbody id="seisoBody">
                 
                 <tr style="height: 10px;"><td class="no-border" colspan="12"></td><td rowspan="3" class="center-cell bg-register" contenteditable="true" data-key="s_2_13">H/C</td></tr>
@@ -346,7 +336,6 @@
         </div>
     </div>
 
-    <!-- タブ3: 入社手続書類 -->
     <div id="onboarding" class="tab-content doc-wrapper">
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
@@ -355,9 +344,24 @@
                 <span class="fill-blank" contenteditable="true" data-key="doc1_emp_name_top" style="min-width: 250px;"></span> 殿
             </div>
             <div class="doc-date">令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy1"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm1"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd1"></span> 日</div>
+            
             <table class="doc-table">
-                <tr><th>雇用契約期間</th><td>令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy2"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm2"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd2"></span> 日 より　期間の定め無し</td></tr>
-                <tr><th>雇用形態</th><td><span class="fill-blank" contenteditable="true" data-key="doc1_emp" style="min-width: 150px;">パートタイマー ・ 正社員</span></td></tr>
+                <tr>
+                    <th>雇用契約期間</th>
+                    <td>
+                        令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy2"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm2"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd2"></span> 日 ～ 
+                        令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy3"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm3"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd3"></span> 日<br>
+                        （期間の定めあり）
+                    </td>
+                </tr>
+                <tr>
+                    <th>契約更新の有無</th>
+                    <td>
+                        <span class="fill-blank" contenteditable="true" data-key="doc1_renew" style="min-width: 150px;">更新する場合がある</span><br>
+                        ※契約更新は、勤務成績・態度、能力、会社の経営状況等により判断する。
+                    </td>
+                </tr>
+                <tr><th>雇用形態</th><td><span class="fill-blank" contenteditable="true" data-key="doc1_emp" style="min-width: 150px;">パートタイマー</span></td></tr>
                 <tr><th>就業場所</th><td>セブンイレブン尾張旭晴丘町池上店<br>但し、業務の都合により勤務地を変更する場合がある</td></tr>
                 <tr><th>仕事内容</th><td>コンビニエンスストアにおける接客、販売業務</td></tr>
                 <tr><th>就業時間</th><td>シフト表による<br>※ただし、業務上就業時間・休憩時間を変更する場合がある。</td></tr>
@@ -367,7 +371,7 @@
                 <tr><th>賃金の支払</th><td>毎月15日締切り、当月25日支払<br>賃金支払時に控除する費用（所得税、雇用保険等）</td></tr>
                 <tr><th>賞与</th><td>なし</td></tr>
                 <tr><th>退職金</th><td>なし</td></tr>
-                <tr><th>退職に関する事項</th><td>定年は満65歳とし、定年に達したときをもって自然退職とする<br>自己の都合により退職しようとするときは、1ヶ月前までに届け出ること</td></tr>
+                <tr><th>退職に関する事項</th><td>自己の都合により退職しようとするときは、1ヶ月前までに届け出ること<br>その他、解雇等については就業規則の定めによる</td></tr>
                 <tr><th>その他</th><td>上記以外の労働条件の詳細については、就業規則または、関係諸法令を参考にその都度会社が取り決めるものとする。</td></tr>
             </table>
             <div style="text-align: right; margin-top: 30px; font-size: 16px;">（使用者）　セブンイレブン尾張旭晴丘町池上店<br>蟹江　明雄　　印</div>
@@ -449,7 +453,6 @@
         </div>
     </div>
 
-    <!-- タブ4: 卒業証書 -->
     <div id="diploma" class="tab-content" style="background-color: var(--bg-color);">
         <p class="exclude-print" style="text-align:center; color: #d93025; font-weight:bold;">※画面上の点線枠は印刷位置のガイドです。印刷時は「文字だけ」が印字されます。</p>
         <div class="diploma-print-area">
