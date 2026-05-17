@@ -324,8 +324,11 @@
                     <td colspan="2" contenteditable="true" data-key="s_15_7">306 (土)</td><td class="no-border bg-aisle"></td>
                     <td colspan="2" class="center-cell" contenteditable="true" data-key="s_15_10">403</td><td class="no-border bg-aisle"></td>
                 </tr>
-                <tr style="height: 10px;"><td colspan="12" class="no-border"></td><td rowspan="2" class="center-cell bg-chilled" contenteditable="true" data-key="s_16_13">壁面 (土)</td></tr>
-                <tr><td colspan="12" class="no-border"></td></tr>
+                
+                <tr class="gondola-row-tall">
+                    <td colspan="12" class="no-border"></td>
+                    <td class="center-cell bg-chilled" contenteditable="true" data-key="s_16_13">壁面 (土)</td>
+                </tr>
             </tbody>
         </table>
 
@@ -446,4 +449,141 @@
                 <span class="fill-blank" contenteditable="true" data-key="doc5_name" style="min-width: 150px; border:none; border-bottom:1px solid #999;"></span> さんの保護者様へ
             </div>
             <div class="doc-body" style="line-height: 2.2;">
-                <p>お世話になります、セブンイレブン尾張旭晴丘町池上店の蟹江と申します。<br>この度は、大切なお子
+                <p>お世話になります、セブンイレブン尾張旭晴丘町池上店の蟹江と申します。<br>この度は、大切なお子様を当店舗での従業員として採用させて頂きました。<br>これから責任を持って教育に当たらせて頂きますのでどうぞ宜しくお願い致します。</p>
+                <p>さて、セブンイレブンでは現在『近くて便利』という標語を掲げ、<br>近隣の方々にいつも便利に利用して頂けるように商品の販売だけでなく、<br>様々なサービスの提供を行っております。<br>その中で、お子様に関してはレジでの接客だけではなく、商品の管理や発注業務、<br>清掃業務や商品のお勧めなど多岐にわたる業務を実施して頂きます。<br>これらの職務に関しては、新たな職体験の一つというだけでなく、今後の社会人生活<br>においての重要な指針にもなると考えております。</p>
+                <p>時には難しい場面に遭遇して壁に当たる事もあると思いますので、そのような時には<br>是非とも励ましてあげて下さい。<br>又、お子様が当店で頑張って職務をしている事については陰ながら応援して頂けたら、<br>幸いでございます。<br>もちろん学業が最優先ではありますので、出来る限りのバックアップをさせて頂きます。<br>気になる点などがありましたら、いつでもご意見を頂きますようお願い申し上げます。</p>
+                <p>末筆ながら皆様のご健康とご多幸を心よりお祈り申し上げます。</p>
+            </div>
+            <div style="text-align: right; margin-top: 50px; font-size: 16px;">
+                セブンイレブン尾張旭晴丘町池上店<br><br><br><br>
+            </div>
+        </div>
+    </div>
+
+    <div id="diploma" class="tab-content" style="background-color: var(--bg-color);">
+        <p class="exclude-print" style="text-align:center; color: #d93025; font-weight:bold;">※画面上の点線枠は印刷位置のガイドです。印刷時は「文字だけ」が印字されます。</p>
+        <div class="diploma-print-area">
+            
+            <div class="brush-text dip-number" contenteditable="true" data-key="d_num">第 711 号</div>
+            <div class="brush-text dip-title">卒業証書</div>
+            <div class="brush-text dip-name">
+                <span class="editable-line" contenteditable="true" data-key="d_name">（スタッフ氏名を入力）</span> 殿
+            </div>
+
+            <div class="brush-text dip-main">
+                <div contenteditable="true" data-key="d_t1">あなたはセブンイレブン尾張旭晴丘町池上店において</div>
+                <div contenteditable="true" data-key="d_t2">長きにわたり学業と両立しながら誠実に勤務され</div>
+                <div contenteditable="true" data-key="d_t3">店舗の発展に大きく貢献されました</div>
+                <div contenteditable="true" data-key="d_t4">この度 卒業を迎えられるにあたり その功績を称え</div>
+                <div contenteditable="true" data-key="d_t5">感謝の意を表するとともに これを賞します</div>
+                <div contenteditable="true" data-key="d_t6">今後のご健勝とご活躍を心よりお祈り申し上げます</div>
+            </div>
+
+            <div class="brush-text dip-date">
+                令和 <span class="editable-line" contenteditable="true" data-key="d_y"></span> 年 
+                <span class="editable-line" contenteditable="true" data-key="d_m"></span> 月 
+                <span class="editable-line" contenteditable="true" data-key="d_d"></span> 日
+            </div>
+
+            <div class="brush-text dip-footer">
+                セブンイレブン尾張旭晴丘町池上店<br>
+                オーナー 蟹江 明雄
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function togglePrint(checkbox) {
+            const page = checkbox.closest('.doc-page');
+            if (checkbox.checked) {
+                page.classList.remove('exclude-print');
+            } else {
+                page.classList.add('exclude-print');
+            }
+        }
+
+        function initDateSelect() {
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth() + 1;
+
+            for(let y = currentYear - 2; y <= currentYear + 3; y++) {
+                const option = document.createElement('option'); option.value = y; option.text = y;
+                if(y === currentYear) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+
+            for(let m = 1; m <= 12; m++) {
+                const option = document.createElement('option'); option.value = String(m).padStart(2, '0'); option.text = m;
+                if(m === currentMonth) option.selected = true;
+                monthSelect.appendChild(option);
+            }
+            
+            generateSendoTable();
+        }
+
+        function getDisplayDate(year, month, dayOffset) {
+            let lastDay = new Date(year, month, 0).getDate();
+            if (dayOffset > lastDay) return "";
+            let d = new Date(year, month - 1, dayOffset);
+            return `${d.getMonth() + 1}/${d.getDate()}`;
+        }
+
+        function generateSendoTable() {
+            const year = parseInt(document.getElementById('yearSelect').value, 10);
+            const month = parseInt(document.getElementById('monthSelect').value, 10);
+            const val = `${year}-${String(month).padStart(2, '0')}`;
+            const tbody = document.getElementById('sendoBody');
+            let html = '';
+            
+            for(let i = 1; i <= 11; i++) {
+                let d1Str = getDisplayDate(year, month, i);
+                let d2Str = getDisplayDate(year, month, i + 11);
+                let d3Str = getDisplayDate(year, month, i + 22);
+
+                for (let row = 0; row < 5; row++) {
+                    let td1 = (row === 0) ? d1Str : ""; let td4 = (row === 0) ? d2Str : ""; let td7 = (row === 0) ? d3Str : "";
+                    html += `<tr>
+                        <td contenteditable="true" data-key="sendo_${val}_${i}_${row}_1">${td1}</td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_2"></td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_3"></td>
+                        <td contenteditable="true" data-key="sendo_${val}_${i}_${row}_4">${td4}</td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_5"></td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_6"></td>
+                        <td contenteditable="true" data-key="sendo_${val}_${i}_${row}_7">${td7}</td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_8"></td><td contenteditable="true" data-key="sendo_${val}_${i}_${row}_9"></td>
+                    </tr>`;
+                }
+            }
+            tbody.innerHTML = html;
+            loadData();
+        }
+
+        function saveData() {
+            document.querySelectorAll('[contenteditable="true"], .fill-blank, .doc-sign-input').forEach(cell => {
+                if(cell.dataset.key) { localStorage.setItem(cell.dataset.key, cell.innerText || cell.innerHTML); }
+            });
+            alert('全タブのデータを保存しました。');
+        }
+
+        function loadData() {
+            document.querySelectorAll('[contenteditable="true"], .fill-blank, .doc-sign-input').forEach(cell => {
+                if(cell.dataset.key) {
+                    const saved = localStorage.getItem(cell.dataset.key);
+                    if(saved !== null && saved !== "") { 
+                        if(cell.classList.contains('fill-blank') || cell.classList.contains('doc-sign-input') || cell.classList.contains('editable-line') || cell.tagName === 'P' || cell.tagName === 'DIV'){
+                            cell.innerText = saved;
+                        } else { cell.innerHTML = saved; }
+                    }
+                }
+            });
+        }
+
+        window.onload = function() { initDateSelect(); loadData(); };
+    </script>
+</body>
+</html>
