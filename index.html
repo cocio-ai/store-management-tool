@@ -201,6 +201,7 @@
 </head>
 <body>
 
+    <!-- ヘッダー -->
     <div class="header">
         <h2>店舗管理ツール</h2>
         <div>
@@ -209,6 +210,7 @@
         </div>
     </div>
 
+    <!-- タブメニュー -->
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('sendo')">非デイリー鮮度チェック</button>
         <button class="tab-btn" onclick="switchTab('seiso')">島ゴンドラ清掃表</button>
@@ -216,6 +218,7 @@
         <button class="tab-btn" onclick="switchTab('diploma')">卒業証書 (証書直接印刷)</button>
     </div>
 
+    <!-- タブ1: 非デイリー鮮度チェック表 -->
     <div id="sendo" class="tab-content active">
         <div class="controls">
             対象年月を選択: 
@@ -223,7 +226,7 @@
             <select id="monthSelect" onchange="generateSendoTable()"></select> 月
         </div>
         <table id="sendoTable" class="op-table">
-            <colgroup><col style="width: 5%;"> <col style="width: 21%;"> <col style="width: 7%;"><col style="width: 5%;"> <col style="width: 21%;"> <col style="width: 7%;"><col style="width: 5%;"> <col style="width: 21%;"> <col style="width: 8%;"></colgroup>
+            <colgroup><col style="width: 7%;"> <col style="width: 19%;"> <col style="width: 7%;"><col style="width: 7%;"> <col style="width: 19%;"> <col style="width: 7%;"><col style="width: 7%;"> <col style="width: 19%;"> <col style="width: 8%;"></colgroup>
             <thead>
                 <tr><th colspan="9" class="title-cell" style="text-align: center !important; font-size: 18px; padding-bottom: 10px;">非デイリー鮮度チェック確認表</th></tr>
                 <tr><th>日付</th><th>商品（ゴンドラ番号）</th><th>賞味期限</th><th>日付</th><th>商品（ゴンドラ番号）</th><th>賞味期限</th><th>日付</th><th>商品（ゴンドラ番号）</th><th>賞味期限</th></tr>
@@ -232,13 +235,19 @@
         </table>
     </div>
 
+    <!-- タブ2: 島ゴンドラ清掃表 -->
     <div id="seiso" class="tab-content">
         <div style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 15px; letter-spacing: 2px;">
             ゴンドラ定期清掃表 (非デイリー鮮度チェック確認表)
         </div>
         <table id="seisoTable" class="op-table">
             <colgroup>
-                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 3.1%;"> <col style="width: 8.5%;"> </colgroup>
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 100s -->
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 200s -->
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 4.1%;"> <!-- 300s -->
+                <col style="width: 9.7%;"> <col style="width: 9.4%;"> <col style="width: 3.1%;"> <!-- 400s/Ice -->
+                <col style="width: 8.5%;"> <!-- Chilled -->
+            </colgroup>
             <tbody id="seisoBody">
                 
                 <tr style="height: 10px;"><td class="no-border" colspan="12"></td><td rowspan="3" class="center-cell bg-register" contenteditable="true" data-key="s_2_13">H/C</td></tr>
@@ -345,6 +354,7 @@
         </div>
     </div>
 
+    <!-- タブ3: 入社手続書類 -->
     <div id="onboarding" class="tab-content doc-wrapper">
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
@@ -487,6 +497,7 @@
         </div>
     </div>
 
+    <!-- タブ4: 卒業証書 -->
     <div id="diploma" class="tab-content" style="background-color: var(--bg-color);">
         <p class="exclude-print" style="text-align:center; color: #d93025; font-weight:bold;">※画面上の点線枠は印刷位置のガイドです。印刷時は「文字だけ」が印字されます。</p>
         <div class="diploma-print-area">
@@ -558,11 +569,13 @@
             generateSendoTable();
         }
 
+        // 💡 修正箇所：日付の横に曜日を追加しました
         function getDisplayDate(year, month, dayOffset) {
             let lastDay = new Date(year, month, 0).getDate();
             if (dayOffset > lastDay) return "";
             let d = new Date(year, month - 1, dayOffset);
-            return `${d.getMonth() + 1}/${d.getDate()}`;
+            const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+            return `${d.getMonth() + 1}/${d.getDate()} (${weekdays[d.getDay()]})`;
         }
 
         function generateSendoTable() {
