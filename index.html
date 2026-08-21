@@ -356,42 +356,49 @@
 
     <!-- タブ3: 入社手続書類 -->
     <div id="onboarding" class="tab-content doc-wrapper">
+        
+        <!-- ==============================================
+             💡 修正箇所：法改正対応版 労働条件通知書
+        =============================================== -->
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
             <div class="doc-title">労 働 条 件 通 知 書</div>
             <div style="font-size: 18px; margin-bottom: 20px;">
                 <span class="fill-blank" contenteditable="true" data-key="doc1_emp_name_top" style="min-width: 250px;"></span> 殿
             </div>
-            <div class="doc-date">令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy1"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm1"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd1"></span> 日</div>
             
             <table class="doc-table">
                 <tr>
                     <th>雇用契約期間</th>
                     <td>
-                        令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy2" style="min-width: 20px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm2" style="min-width: 15px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd2" style="min-width: 15px;"></span> 日 ～ 令和 <span class="fill-blank" contenteditable="true" data-key="doc1_dy3" style="min-width: 20px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm3" style="min-width: 15px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd3" style="min-width: 15px;"></span> 日 (期間の定めあり)
+                        <span class="fill-blank" contenteditable="true" data-key="doc1_dy2" style="min-width: 30px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm2" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd2" style="min-width: 20px;"></span> 日 ～ <span class="fill-blank" contenteditable="true" data-key="doc1_dy3" style="min-width: 30px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm3" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd3" style="min-width: 20px;"></span> 日 期間の定め有り<br>
+                        ただし、更新する場合がある
                     </td>
                 </tr>
-                <tr>
-                    <th>契約更新の有無</th>
-                    <td>
-                        <span class="fill-blank" contenteditable="true" data-key="doc1_renew" style="min-width: 150px;">更新する場合がある</span><br>
-                        ※契約更新は、勤務成績・態度、能力、会社の経営状況等により判断する。
-                    </td>
-                </tr>
-                <tr><th>雇用形態</th><td><span class="fill-blank" contenteditable="true" data-key="doc1_emp" style="min-width: 150px;">パートタイマー</span></td></tr>
-                <tr><th>就業場所</th><td>セブンイレブン尾張旭晴丘町池上店<br>但し、業務の都合により勤務地を変更する場合がある</td></tr>
-                <tr><th>仕事内容</th><td>コンビニエンスストアにおける接客、販売業務</td></tr>
-                <tr><th>就業時間</th><td>シフト表による<br>※ただし、業務上就業時間・休憩時間を変更する場合がある。</td></tr>
-                <tr><th>所定外労働</th><td>有り</td></tr>
-                <tr><th>休日及び休暇</th><td>シフト制、その他会社が定めた日<br>年次有給休暇あり　※就業規則の定めによる</td></tr>
-                <tr><th>賃金</th><td>基本賃金　　時給 <span class="fill-blank" contenteditable="true" data-key="doc1_wage" style="min-width: 80px;"></span> 円<br>時間外手当　法定通り</td></tr>
-                <tr><th>賃金の支払</th><td>毎月15日締切り、当月25日支払<br>賃金支払時に控除する費用（所得税、雇用保険等）</td></tr>
-                <tr><th>賞与</th><td>なし</td></tr>
-                <tr><th>退職金</th><td>なし</td></tr>
-                <tr><th>退職に関する事項</th><td>自己の都合により退職しようとするときは、1ヶ月前までに届け出ること<br>その他、解雇等については就業規則の定めによる</td></tr>
+                <tr><th>雇用形態</th><td><span class="fill-blank" contenteditable="true" data-key="doc1_emp" style="min-width: 150px; border:none; text-align:left;">パートタイマー ・ 有期契約社員</span></td></tr>
+                <tr><th>就業場所</th><td>使用者の指定する店舗<br>※変更の範囲も同様とする</td></tr>
+                <tr><th>仕事内容</th><td>商品の発注、品出し、陳列、レジ、接客販売、清掃、予約活動全般、その他店舗の営業に関わる業務<br>※変更の範囲も同様とする</td></tr>
+                <tr><th>就業時間</th><td>シフト表による<br>※ただし、業務上就業時間・休憩時間を変更する場合がある</td></tr>
+                <tr><th>所定外労働</th><td>有</td></tr>
+                <tr><th>休日及び休暇</th><td>シフト制、その他会社が定めた日<br>年次有給休暇あり ※就業規則の定めによる</td></tr>
+                <tr><th>賃金</th><td>1. 基本賃金　時給 <span class="fill-blank" contenteditable="true" data-key="doc1_wage" style="min-width: 60px;"></span> 月給 <span class="fill-blank" contenteditable="true" data-key="doc1_wage_m" style="min-width: 60px;"></span> 円<br>2. 時間外手当　法定通り</td></tr>
+                <tr><th>賃金の支払</th><td>毎月 <span class="fill-blank" contenteditable="true" data-key="doc1_pay_d1" style="min-width: 30px;">15</span> 日締切り、当月 <span class="fill-blank" contenteditable="true" data-key="doc1_pay_d2" style="min-width: 30px;">25</span> 日支払<br>賃金支払時に控除する費用(所得税、雇用保険、社会保険等)</td></tr>
+                <tr><th>賞与</th><td>無</td></tr>
+                <tr><th>退職金</th><td>無</td></tr>
+                <tr><th>退職に関する事項</th><td>1. 満65歳とし、定年年齢に達した日の直後の賃金締め切り日をもって退職とする<br>2. 自己の都合により退職しようとするときは、1ヶ月前までに届け出ること</td></tr>
                 <tr><th>その他</th><td>上記以外の労働条件の詳細については、就業規則または、関係諸法令を参考にその都度会社が取り決めるものとする。</td></tr>
             </table>
-            <div style="text-align: right; margin-top: 30px; font-size: 16px;">（使用者）　セブンイレブン尾張旭晴丘町池上店<br>蟹江　明雄　　印</div>
+
+            <div class="doc-date" style="text-align: right; margin-top: 20px;">
+                <span class="fill-blank" contenteditable="true" data-key="doc1_dy1" style="min-width: 40px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm1" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd1" style="min-width: 20px;"></span> 日
+            </div>
+            
+            <div style="margin-left: auto; width: 65%; font-size: 16px; line-height: 1.8;">
+                (使用者)<br>
+                <div style="display: flex;"><div style="width: 80px;">所在地</div><div class="fill-blank" contenteditable="true" data-key="doc1_loc" style="flex: 1; text-align: left;"></div></div>
+                <div style="display: flex;"><div style="width: 80px;">事業所名</div><div class="fill-blank" contenteditable="true" data-key="doc1_shop" style="flex: 1; text-align: left;">セブンイレブン尾張旭晴丘町池上店</div></div>
+                <div style="display: flex;"><div style="width: 80px;">事業主氏名</div><div class="fill-blank" contenteditable="true" data-key="doc1_owner" style="flex: 1; text-align: left;">蟹江 明雄</div><span style="margin-left:10px;">印</span></div>
+            </div>
         </div>
 
         <div class="doc-page">
@@ -569,7 +576,6 @@
             generateSendoTable();
         }
 
-        // 💡 修正箇所：日付の横に曜日を追加しました
         function getDisplayDate(year, month, dayOffset) {
             let lastDay = new Date(year, month, 0).getDate();
             if (dayOffset > lastDay) return "";
