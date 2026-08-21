@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>店舗管理ツール（清掃表アップグレード版）</title>
     <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
-    <!-- 💡 追加：HTMLを画像化するためのライブラリを読み込みます -->
+    <!-- HTMLを画像化するためのライブラリ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
@@ -209,8 +209,6 @@
         <h2>店舗管理ツール</h2>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="action-btn save" onclick="saveData()">💾 データを保存</button>
-            
-            <!-- 💡 修正箇所：ボタンを2種類に分けました -->
             <button class="action-btn" onclick="window.print()">🖨️ そのまま印刷</button>
             <button class="action-btn img-export" onclick="exportToImage(this)">🖼️ 画像にする(ヘッダー回避)</button>
         </div>
@@ -397,7 +395,6 @@
             
             <div style="margin-left: auto; width: 65%; font-size: 16px; line-height: 1.8;">
                 (使用者)<br>
-                <!-- 💡 修正箇所：所在地の初期値を設定しました -->
                 <div style="display: flex;"><div style="width: 80px;">所在地</div><div class="fill-blank" contenteditable="true" data-key="doc1_loc" style="flex: 1; text-align: left;">愛知県尾張旭市晴丘町池上125番1</div></div>
                 <div style="display: flex;"><div style="width: 80px;">事業所名</div><div class="fill-blank" contenteditable="true" data-key="doc1_shop" style="flex: 1; text-align: left;">セブンイレブン尾張旭晴丘町池上店</div></div>
                 <div style="display: flex;"><div style="width: 80px;">事業主氏名</div><div class="fill-blank" contenteditable="true" data-key="doc1_owner" style="flex: 1; text-align: left;">蟹江 明雄</div><span style="margin-left:10px;">印</span></div>
@@ -540,6 +537,15 @@
         </div>
     </div>
 
+    <!-- 💡 追加：画像を表示して長押し保存させるためのモーダル（ポップアップ） -->
+    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;">
+        <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; max-width: 90%; max-height: 90%; display: flex; flex-direction: column;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #d32f2f; font-size: 16px;">👇 下の画像を長押しして「写真に追加」または「画像を保存」を選んでください</p>
+            <div id="modalImageContainer" style="overflow: auto; flex: 1; border: 1px solid #ccc; margin-bottom: 15px; background: #f4f5f7;"></div>
+            <button class="action-btn" onclick="document.getElementById('imageModal').style.display='none'" style="width: 100%; padding: 15px; background: #333; font-size: 16px;">❌ 閉じる</button>
+        </div>
+    </div>
+
     <script>
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -632,35 +638,38 @@
             });
         }
 
-        // 💡 追加：画像を生成して保存する処理
+        // 💡 修正箇所：画像を自動ダウンロードさせるのではなく、画面上に表示させる方式に変更
         function exportToImage(btnElement) {
             const activeTab = document.querySelector('.tab-content.active');
             if (!activeTab) return;
 
-            // ボタンを処理中ステータスに変更
             const originalText = btnElement.innerHTML;
             btnElement.innerHTML = "⏳ 画像化しています...";
             btnElement.disabled = true;
 
-            // 画像に出したくない要素（チェックボックスなど）を一時的に非表示
             const controls = activeTab.querySelectorAll('.print-control, .exclude-print, .controls');
             controls.forEach(c => c.style.display = 'none');
 
-            // html2canvasで画面を撮影
             html2canvas(activeTab, { 
                 scale: 2, 
-                backgroundColor: '#ffffff' // 背景を白で固定
+                backgroundColor: '#ffffff'
             }).then(canvas => {
-                // 画像をダウンロード
-                const link = document.createElement('a');
-                link.download = '店舗管理ツール_出力.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                // 画像データを作成
+                const imgUrl = canvas.toDataURL('image/png');
+                const imgElement = document.createElement('img');
+                imgElement.src = imgUrl;
+                imgElement.style.maxWidth = '100%';
+                imgElement.style.height = 'auto';
+
+                // モーダル内に画像をセットして表示
+                const container = document.getElementById('modalImageContainer');
+                container.innerHTML = '';
+                container.appendChild(imgElement);
+                document.getElementById('imageModal').style.display = 'flex';
                 
-                // 非表示にした要素を元に戻す
+                // ボタン類を元に戻す
                 controls.forEach(c => c.style.display = 'block');
                 if (activeTab.id === 'onboarding') {
-                    // 入社手続書類タブは右寄せなのでスタイル調整
                     activeTab.querySelectorAll('.print-control').forEach(c => c.style.display = 'block');
                 }
                 
