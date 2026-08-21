@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>店舗管理ツール（清掃表アップグレード版）</title>
     <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&display=swap" rel="stylesheet">
+    <!-- 💡 追加：HTMLを画像化するためのライブラリを読み込みます -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         /* =========================================
@@ -21,7 +23,7 @@
             background-color: var(--bg-color);
             color: #333;
         }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
         
         .tabs { 
             display: flex; 
@@ -47,8 +49,9 @@
         .tab-btn.active { background: var(--primary-color); color: white; }
         .tab-content { display: none; background: white; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow-x: auto; }
         .tab-content.active { display: block; }
-        .action-btn { padding: 10px 20px; font-size: 15px; font-weight: bold; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; }
+        .action-btn { padding: 10px 15px; font-size: 14px; font-weight: bold; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer; }
         .action-btn.save { background: #ff6600; }
+        .action-btn.img-export { background: #1890ff; }
         
         .controls { margin-bottom: 10px; font-size: 16px; font-weight: bold;}
         .controls select { padding: 8px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; margin: 0 5px; cursor: pointer; }
@@ -204,9 +207,12 @@
     <!-- ヘッダー -->
     <div class="header">
         <h2>店舗管理ツール</h2>
-        <div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="action-btn save" onclick="saveData()">💾 データを保存</button>
-            <button class="action-btn" onclick="window.print()">🖨️ A4縦で印刷 / 出力</button>
+            
+            <!-- 💡 修正箇所：ボタンを2種類に分けました -->
+            <button class="action-btn" onclick="window.print()">🖨️ そのまま印刷</button>
+            <button class="action-btn img-export" onclick="exportToImage(this)">🖼️ 画像にする(ヘッダー回避)</button>
         </div>
     </div>
 
@@ -356,10 +362,6 @@
 
     <!-- タブ3: 入社手続書類 -->
     <div id="onboarding" class="tab-content doc-wrapper">
-        
-        <!-- ==============================================
-             💡 修正箇所：法改正対応版 労働条件通知書
-        =============================================== -->
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
             <div class="doc-title">労 働 条 件 通 知 書</div>
@@ -395,7 +397,8 @@
             
             <div style="margin-left: auto; width: 65%; font-size: 16px; line-height: 1.8;">
                 (使用者)<br>
-                <div style="display: flex;"><div style="width: 80px;">所在地</div><div class="fill-blank" contenteditable="true" data-key="doc1_loc" style="flex: 1; text-align: left;"></div></div>
+                <!-- 💡 修正箇所：所在地の初期値を設定しました -->
+                <div style="display: flex;"><div style="width: 80px;">所在地</div><div class="fill-blank" contenteditable="true" data-key="doc1_loc" style="flex: 1; text-align: left;">愛知県尾張旭市晴丘町池上125番1</div></div>
                 <div style="display: flex;"><div style="width: 80px;">事業所名</div><div class="fill-blank" contenteditable="true" data-key="doc1_shop" style="flex: 1; text-align: left;">セブンイレブン尾張旭晴丘町池上店</div></div>
                 <div style="display: flex;"><div style="width: 80px;">事業主氏名</div><div class="fill-blank" contenteditable="true" data-key="doc1_owner" style="flex: 1; text-align: left;">蟹江 明雄</div><span style="margin-left:10px;">印</span></div>
             </div>
@@ -626,6 +629,48 @@
                         } else { cell.innerHTML = saved; }
                     }
                 }
+            });
+        }
+
+        // 💡 追加：画像を生成して保存する処理
+        function exportToImage(btnElement) {
+            const activeTab = document.querySelector('.tab-content.active');
+            if (!activeTab) return;
+
+            // ボタンを処理中ステータスに変更
+            const originalText = btnElement.innerHTML;
+            btnElement.innerHTML = "⏳ 画像化しています...";
+            btnElement.disabled = true;
+
+            // 画像に出したくない要素（チェックボックスなど）を一時的に非表示
+            const controls = activeTab.querySelectorAll('.print-control, .exclude-print, .controls');
+            controls.forEach(c => c.style.display = 'none');
+
+            // html2canvasで画面を撮影
+            html2canvas(activeTab, { 
+                scale: 2, 
+                backgroundColor: '#ffffff' // 背景を白で固定
+            }).then(canvas => {
+                // 画像をダウンロード
+                const link = document.createElement('a');
+                link.download = '店舗管理ツール_出力.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // 非表示にした要素を元に戻す
+                controls.forEach(c => c.style.display = 'block');
+                if (activeTab.id === 'onboarding') {
+                    // 入社手続書類タブは右寄せなのでスタイル調整
+                    activeTab.querySelectorAll('.print-control').forEach(c => c.style.display = 'block');
+                }
+                
+                btnElement.innerHTML = originalText;
+                btnElement.disabled = false;
+            }).catch(err => {
+                alert("画像化に失敗しました。");
+                controls.forEach(c => c.style.display = 'block');
+                btnElement.innerHTML = originalText;
+                btnElement.disabled = false;
             });
         }
 
