@@ -24,27 +24,8 @@
         }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
         
-        .tabs { 
-            display: flex; 
-            flex-wrap: nowrap; 
-            gap: 8px; 
-            margin-bottom: 20px; 
-            overflow-x: auto; 
-            padding-bottom: 5px; 
-        }
-        .tab-btn { 
-            padding: 10px 15px; 
-            font-size: 14px; 
-            font-weight: bold; 
-            border: 2px solid var(--primary-color); 
-            background: white; 
-            color: var(--primary-color); 
-            border-radius: 4px; 
-            cursor: pointer; 
-            transition: 0.2s; 
-            white-space: nowrap; 
-            flex-shrink: 0; 
-        }
+        .tabs { display: flex; flex-wrap: nowrap; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { padding: 10px 15px; font-size: 14px; font-weight: bold; border: 2px solid var(--primary-color); background: white; color: var(--primary-color); border-radius: 4px; cursor: pointer; transition: 0.2s; white-space: nowrap; flex-shrink: 0; }
         .tab-btn.active { background: var(--primary-color); color: white; }
         .tab-content { display: none; background: white; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow-x: auto; }
         .tab-content.active { display: block; }
@@ -91,10 +72,7 @@
         .bg-register { background-color: #fff3e0 !important; }  
         .bg-aisle { background-color: #fafafa !important; border: 1px dashed #ddd !important; color: #999; text-align: center !important; vertical-align: middle !important; font-weight: normal !important; }
 
-        .instruction-box {
-            background-color: #fffde7; border: 1px solid #ffd54f; border-left: 5px solid #ffca28;
-            padding: 15px 20px; margin-top: 20px; border-radius: 4px; line-height: 1.8; font-size: 14px;
-        }
+        .instruction-box { background-color: #fffde7; border: 1px solid #ffd54f; border-left: 5px solid #ffca28; padding: 15px 20px; margin-top: 20px; border-radius: 4px; line-height: 1.8; font-size: 14px; }
         .instruction-box h4 { margin: 0 0 10px 0; color: #f57f17; font-size: 16px; }
         .instruction-box ul { margin: 0; padding-left: 20px; }
         .instruction-box li { margin-bottom: 5px; }
@@ -103,11 +81,7 @@
            3. 入社手続書類セット
         ========================================= */
         .doc-wrapper { background-color: var(--bg-color); padding: 0; box-shadow: none; }
-        .doc-page {
-            font-family: "MS Mincho", "ＭＳ 明朝", serif; background: white; margin: 0 auto 30px auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #ccc; max-width: 800px; box-sizing: border-box;
-            padding: 20px 40px 40px 40px; color: #000; line-height: 1.6; font-size: 15px; transition: opacity 0.3s;
-        }
+        .doc-page { font-family: "MS Mincho", "ＭＳ 明朝", serif; background: white; margin: 0 auto 30px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #ccc; max-width: 800px; box-sizing: border-box; padding: 20px 40px 40px 40px; color: #000; line-height: 1.6; font-size: 15px; transition: opacity 0.3s; }
         .doc-page.exclude-print { opacity: 0.4; }
         .print-control { text-align: right; padding-bottom: 15px; margin-bottom: 20px; border-bottom: 1px dashed #ccc; font-family: sans-serif; }
         .print-control label { cursor: pointer; font-weight: bold; font-size: 16px; color: #333; }
@@ -131,11 +105,7 @@
         /* =========================================
            4. 卒業証書
         ========================================= */
-        .diploma-print-area {
-            font-family: 'Yuji Syuku', "HGP行書体", "HG行書体", serif; width: 210mm; height: 297mm;
-            margin: 0 auto; position: relative; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            border: 1px dashed #ccc; overflow: hidden; color: #000;
-        }
+        .diploma-print-area { font-family: 'Yuji Syuku', "HGP行書体", "HG行書体", serif; width: 210mm; height: 297mm; margin: 0 auto; position: relative; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.2); border: 1px dashed #ccc; overflow: hidden; color: #000; }
         .brush-text { position: absolute; white-space: nowrap; font-weight: bold; }
         .editable-line { border-bottom: 1px dotted #ccc; display: inline-block; min-width: 50px; text-align: center; cursor: text; font-family: 'Yuji Syuku', serif; }
         .dip-number { top: 20mm; right: 20mm; font-size: 16pt; text-align: right; }
@@ -146,77 +116,77 @@
         .dip-footer { top: 260mm; right: 30mm; font-size: 18pt; line-height: 2; text-align: right; }
 
         /* =========================================
-           5. 印刷用設定（@media print）
+           5. 【超重要】A4出力・書き込みスペース最大化モード
+           （印刷時と画像化時の両方で同じ形を作る）
         ========================================= */
+        @media print, (min-width: 0px) {
+            .a4-mode .header, .a4-mode .tabs, .a4-mode .controls, .a4-mode .action-btn, .a4-mode .print-control { display: none !important; }
+            
+            /* A4のサイズに固定（下が見切れないようにするため） */
+            .a4-mode #sendo.tab-content.active, .a4-mode #seiso.tab-content.active, .a4-mode #diploma.tab-content.active { 
+                display: block !important; 
+                width: 794px !important; height: 1123px !important; 
+                padding: 15px !important; margin: 0 auto !important; box-sizing: border-box !important;
+                box-shadow: none !important; border: none !important; overflow: hidden !important; 
+                background: white !important;
+            }
+            .a4-mode #onboarding.tab-content.active { display: block !important; padding: 0 !important; box-shadow: none !important; border: none !important; background: white !important; }
+            .a4-mode .doc-page { width: 794px !important; height: 1123px !important; padding: 25px 40px !important; margin: 0 auto !important; box-sizing: border-box !important; box-shadow: none !important; border: none !important; }
+
+            /* 💡 鮮度チェック表をA4限界まで引き伸ばす（書き込みスペース最大化） */
+            .a4-mode #sendoTable { 
+                width: 100% !important; 
+                height: 1050px !important; /* A4限界の高さ */
+                margin: 0 !important; table-layout: fixed; border: 2px solid #000; 
+            }
+            .a4-mode #sendoTable th { height: auto !important; padding: 2px !important; font-size: 11px !important;}
+            /* セルの高さをautoにすることで自動的にギリギリまでマス目が広がる */
+            .a4-mode #sendoTable td { height: auto !important; padding: 0px 2px !important; font-size: 11px !important; }
+            .a4-mode .title-cell { font-size: 18px !important; padding-bottom: 5px !important; margin: 0 !important; }
+
+            /* 💡 清掃表をA4限界まで引き伸ばす */
+            .a4-mode #seisoTable { 
+                width: 100% !important; 
+                height: 890px !important; /* 下の注意事項が入るギリギリの高さ */
+                margin: 0 !important; table-layout: fixed; border: 2px solid #000; 
+            }
+            .a4-mode #seisoTable td { padding: 4px !important; font-size: 12px !important; border: 1px solid #333; }
+            .a4-mode .gondola-row, .a4-mode .gondola-row-tall, .a4-mode .gondola-row-short { height: auto !important; } 
+            
+            .a4-mode .instruction-box { padding: 15px !important; font-size: 13px !important; margin-top: 10px !important; border: 2px solid #000 !important; background: #fff !important; }
+            
+            .a4-mode .diploma-print-area { width: 100% !important; height: 100% !important; border: none !important; box-shadow: none !important; margin: 0 !important;}
+            .a4-mode .editable-line { border-bottom: none !important; }
+            .a4-mode .exclude-print { display: none !important; }
+        }
+
+        /* 普通の印刷時（そのまま印刷ボタン）用 */
         @media print {
-            @page { size: A4 portrait; margin: 0mm !important; }
-            body { padding: 0 !important; margin: 0 !important; background-color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            @page { size: A4 portrait; margin: 0 !important; }
+            body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0 !important; padding: 0 !important;}
             .header, .tabs, .controls, .action-btn, .print-control { display: none !important; }
             .tab-content { display: none !important; }
             
-            #sendo.tab-content.active, #seiso.tab-content.active, #diploma.tab-content.active { display: block !important; padding: 10mm !important; box-shadow: none; border: none; overflow: visible !important; }
-            #onboarding.tab-content.active { display: block !important; padding: 0 !important; box-shadow: none; border: none; overflow: visible !important; }
-            
-            /* 💡修正：鮮度チェック表が1ページに収まるように高さをガッチリ固定＆折り返し禁止 */
-            #sendoTable { height: 270mm !important; width: 100% !important; margin: 0 !important; font-size: 11px; border: 2px solid #000; table-layout: fixed; }
-            #sendoTable th { height: auto !important; padding: 2px !important; }
-            #sendoTable td { height: 4.4mm !important; padding: 0px 1px !important; font-size: 10px !important; white-space: nowrap !important; overflow: hidden; }
-            .title-cell { font-size: 16px !important; padding-bottom: 3px !important; margin: 0 !important; }
-            
-            /* 💡修正：清掃表も高さを調整し確実に1ページへ */
-            #seiso > div:first-child { font-size: 16px !important; margin-bottom: 5px !important; }
-            #seisoTable { width: 100% !important; border: 2px solid #000; margin: 0; table-layout: fixed; }
-            #seisoTable td { border: 1px solid #333; padding: 4px !important; font-size: 11px !important; }
-            .gondola-row { height: 60px !important; } 
-            .gondola-row-tall { height: 80px !important; } 
-            .gondola-row-short { height: 40px !important; }
-            .instruction-box { border: 1px solid #000; border-left: 5px solid #000; background-color: #fff !important; margin-top: 15px !important; padding: 10px 15px !important; font-size: 13px !important; line-height: 1.6 !important; }
-            .instruction-box h4 { color: #000; margin: 0 0 5px 0 !important; font-size: 15px !important; }
-            
-            /* 入社書類セット */
-            .doc-page { box-shadow: none; border: none; margin: 0; width: 100%; box-sizing: border-box; padding: 10mm !important; page-break-after: always; font-size: 13px !important; line-height: 1.4 !important; }
-            .doc-page:last-child { page-break-after: auto; }
-            .exclude-print { display: none !important; }
-            .doc-title { font-size: 18px !important; margin-bottom: 10px !important; }
-            .doc-title + div { margin-bottom: 10px !important; font-size: 15px !important; }
-            .doc-to { margin-bottom: 10px !important; }
-            .doc-body { margin-bottom: 15px !important; }
-            .doc-body p { margin: 4px 0 !important; }
-            .doc-table { margin-bottom: 10px !important; }
-            .doc-table th, .doc-table td { padding: 4px 6px !important; }
-            .doc-sign-row { margin-bottom: 8px !important; }
-            
-            /* 卒業証書 */
-            .diploma-print-area { border: none; box-shadow: none; margin: 0; width: 100% !important; height: 275mm !important; overflow: visible !important; }
-            .editable-line { border-bottom: none; }
-        }
+            #sendo.tab-content.active, #seiso.tab-content.active, #diploma.tab-content.active { display: block !important; width: 794px !important; height: 1123px !important; padding: 15px !important; margin: 0 auto !important; box-sizing: border-box !important; box-shadow: none !important; border: none !important; overflow: hidden !important; }
+            #onboarding.tab-content.active { display: block !important; padding: 0 !important; box-shadow: none; border: none; }
+            .doc-page { width: 794px !important; height: 1123px !important; padding: 25px 40px !important; margin: 0 auto !important; page-break-after: always; box-sizing: border-box !important; border: none !important; box-shadow: none !important;}
 
-        /* =========================================
-           6. 画像化モード（Exporting）時の専用スタイル
-           （印刷時と同じA4サイズに強制変形してエラーを防ぐ）
-        ========================================= */
-        body.exporting { background: white !important; padding: 0 !important; margin: 0 !important; }
-        body.exporting .tab-content {
-            background: white !important; box-shadow: none !important; border: none !important;
-            padding: 10mm !important; overflow: visible !important;
-            width: 210mm !important; max-width: 210mm !important; min-height: 297mm !important;
-            box-sizing: border-box !important; margin: 0 auto !important;
+            /* 鮮度表限界突破 */
+            #sendoTable { width: 100% !important; height: 1050px !important; margin: 0 !important; table-layout: fixed; border: 2px solid #000; }
+            #sendoTable th { height: auto !important; padding: 2px !important; font-size: 11px !important;}
+            #sendoTable td { height: auto !important; padding: 0px 2px !important; font-size: 11px !important; }
+            .title-cell { font-size: 18px !important; padding-bottom: 5px !important; margin: 0 !important; }
+
+            /* 清掃表限界突破 */
+            #seisoTable { width: 100% !important; height: 890px !important; margin: 0 !important; table-layout: fixed; border: 2px solid #000; }
+            #seisoTable td { padding: 4px !important; font-size: 12px !important; border: 1px solid #333; }
+            .gondola-row, .gondola-row-tall, .gondola-row-short { height: auto !important; } 
+            .instruction-box { padding: 15px !important; font-size: 13px !important; margin-top: 10px !important; border: 2px solid #000 !important; background: #fff !important; }
+
+            .diploma-print-area { width: 100% !important; height: 100% !important; border: none !important; box-shadow: none !important; margin: 0 !important;}
+            .editable-line { border-bottom: none !important; }
+            .exclude-print { display: none !important; }
         }
-        
-        body.exporting #sendoTable { height: 270mm !important; width: 100% !important; margin: 0 !important; font-size: 11px; border: 2px solid #000; table-layout: fixed; }
-        body.exporting #sendoTable th { height: auto !important; padding: 2px !important; }
-        body.exporting #sendoTable td { height: 4.4mm !important; padding: 0px 1px !important; font-size: 10px !important; white-space: nowrap !important; overflow: hidden; }
-        body.exporting .title-cell { font-size: 16px !important; padding-bottom: 3px !important; margin: 0 !important; }
-        
-        body.exporting #seisoTable { width: 100% !important; border: 2px solid #000; margin: 0; table-layout: fixed; }
-        body.exporting #seisoTable td { padding: 4px !important; font-size: 11px !important; border: 1px solid #333; }
-        body.exporting .gondola-row { height: 60px !important; } 
-        body.exporting .gondola-row-tall { height: 80px !important; } 
-        body.exporting .gondola-row-short { height: 40px !important; }
-        body.exporting .instruction-box { padding: 10px 15px !important; font-size: 13px !important; margin-top: 15px !important; border: 1px solid #000; }
-        
-        body.exporting .doc-page { box-shadow: none !important; border: none !important; width: 100% !important; padding: 5mm !important; margin-bottom: 0 !important; }
-        body.exporting .diploma-print-area { border: none !important; box-shadow: none !important; }
     </style>
 </head>
 <body>
@@ -247,7 +217,6 @@
             <select id="monthSelect" onchange="generateSendoTable()"></select> 月
         </div>
         <table id="sendoTable" class="op-table">
-            <!-- 💡修正：日付の列（1列目・4列目・7列目）の幅を9%に広げ、曜日を入れても改行しないようにしました -->
             <colgroup><col style="width: 9%;"> <col style="width: 17%;"> <col style="width: 7%;"><col style="width: 9%;"> <col style="width: 17%;"> <col style="width: 7%;"><col style="width: 9%;"> <col style="width: 17%;"> <col style="width: 8%;"></colgroup>
             <thead>
                 <tr><th colspan="9" class="title-cell" style="text-align: center !important; font-size: 18px; padding-bottom: 10px;">非デイリー鮮度チェック確認表</th></tr>
@@ -594,7 +563,6 @@
             generateSendoTable();
         }
 
-        // 💡修正：曜日と日付の間のスペースを消して、横幅を節約（10/24(水) の形式）
         function getDisplayDate(year, month, dayOffset) {
             let lastDay = new Date(year, month, 0).getDate();
             if (dayOffset > lastDay) return "";
@@ -648,7 +616,7 @@
             });
         }
 
-        // 💡修正：レイアウトが整うのを少し待つ処理＆A4用紙部分だけを正確に切り取る処理
+        // 💡 修正：下部が切れないように、画面位置のリセット＆確実なA4サイズへの固定化
         async function exportToImage(btnElement) {
             const activeTab = document.querySelector('.tab-content.active');
             if (!activeTab) return;
@@ -657,17 +625,26 @@
             btnElement.innerHTML = "⏳ 画像化しています...";
             btnElement.disabled = true;
 
-            const controls = activeTab.querySelectorAll('.print-control, .exclude-print, .controls');
-            controls.forEach(c => c.style.display = 'none');
+            // 🌟 1. 見切れ防止：スクロールを一番上に戻す
+            window.scrollTo(0, 0);
 
-            // 出力用のA4サイズ（CSS）を強制的に適用
-            document.body.classList.add('exporting');
+            // 🌟 2. a4-modeを付与して、確実にA4のピクセルサイズ（794x1123）に固定する
+            document.body.classList.add('a4-mode');
+            
+            // iPadの画面サイズに邪魔されないように、絶対配置で画面左上に強制配置
+            document.body.style.position = 'absolute';
+            document.body.style.top = '0';
+            document.body.style.left = '0';
+            document.body.style.width = '794px';
+            document.body.style.minHeight = '1123px';
+            document.body.style.background = 'white';
+
             const container = document.getElementById('modalImageContainer');
             container.innerHTML = '';
 
             try {
-                // 🌟 超重要：iPadが新しく適用された「A4サイズ」のレイアウト計算を完了するまで「0.3秒」待つ
-                await new Promise(resolve => setTimeout(resolve, 300));
+                // レイアウトがピタッと止まるまで0.5秒待機
+                await new Promise(resolve => setTimeout(resolve, 500));
 
                 let targets = [];
                 if (activeTab.id === 'onboarding') {
@@ -679,10 +656,18 @@
                 }
 
                 for (let i = 0; i < targets.length; i++) {
-                    const canvas = await html2canvas(targets[i], { 
-                        scale: 1.5, // iPadのメモリクラッシュ防止のため画質を少し調整
+                    const target = targets[i];
+                    // 🌟 3. html2canvasにもA4サイズ（794x1123）の枠組みを強制認識させる
+                    const canvas = await html2canvas(target, { 
+                        scale: 2, 
                         useCORS: true,
-                        backgroundColor: '#ffffff'
+                        backgroundColor: '#ffffff',
+                        width: 794,
+                        height: 1123,
+                        windowWidth: 794,
+                        windowHeight: 1123,
+                        scrollY: 0,
+                        scrollX: 0
                     });
                     const imgElement = document.createElement('img');
                     imgElement.src = canvas.toDataURL('image/png');
@@ -695,15 +680,18 @@
 
                 document.getElementById('imageModal').style.display = 'flex';
             } catch (err) {
-                alert("画像化に失敗しました。iPadのメモリ制限の可能性があります。");
+                alert("画像化に失敗しました。");
                 console.error(err);
             } finally {
                 // 処理が終わったら元の画面（iPad用レイアウト）に戻す
-                document.body.classList.remove('exporting');
-                controls.forEach(c => c.style.display = 'block');
-                if (activeTab.id === 'onboarding') {
-                    activeTab.querySelectorAll('.print-control').forEach(c => c.style.display = 'block');
-                }
+                document.body.classList.remove('a4-mode');
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.left = '';
+                document.body.style.width = '';
+                document.body.style.minHeight = '';
+                document.body.style.background = '';
+                
                 btnElement.innerHTML = originalText;
                 btnElement.disabled = false;
             }
