@@ -98,38 +98,35 @@
         .dip-date { top: 240mm; left: 30mm; font-size: 16pt; }
         .dip-footer { top: 260mm; right: 30mm; font-size: 18pt; line-height: 2; text-align: right; }
 
+
         /* =========================================
-           3. 【超重要】そのまま印刷ボタン用の最適化
-           iPadのバグを防ぐため、1マスごとのピクセル高さを完全固定
+           3. 【絶対解決】そのまま印刷（iPad）用 CSS
         ========================================= */
         @media print {
-            @page { size: A4 portrait; margin: 5mm !important; }
+            /* 余白をリセットし、iPadが変な計算をしないようにする */
+            @page { size: A4 portrait; margin: 0 !important; }
             body, html { margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             
             /* 不要なUIを全て隠す */
             .header, .tabs, .controls, .action-btn, .print-control, .exclude-print { display: none !important; }
             .tab-content { display: none !important; }
             
-            /* 表示中のタブのみフル幅で展開 */
-            .tab-content.active { display: block !important; width: 100% !important; padding: 0 !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
-
-            /* テーブルの横幅設定 */
+            /* タブエリアはA4いっぱいに展開 */
+            .tab-content.active { display: block !important; width: 100% !important; padding: 5mm !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
+            
             table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
 
-            /* 🌟 鮮度チェック表：1枚に絶対収める「ピクセル完全固定」設定 */
-            #sendoTable { height: auto !important; margin: 0 !important; }
-            #sendoTable .title-cell { height: 30px !important; font-size: 16px !important; padding: 0 !important; margin: 0 !important; line-height: 30px !important; }
-            #sendoTable th { height: 24px !important; font-size: 11px !important; padding: 0 !important; }
-            /* 1行を18pxにロック(55行×18px=990px)。合計1044pxとなり、A4(1123px)に絶対収まります */
-            #sendoTable td { height: 18px !important; font-size: 11px !important; padding: 0 2px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important;}
+            /* 🌟 鮮度チェック表：絶対に2ページ目に行かないミリ指定（A4=297mmに対し270mmの安全枠） */
+            #sendoTable { height: 270mm !important; max-height: 270mm !important; margin: 0 auto !important; }
+            #sendoTable .title-cell { height: 8mm !important; font-size: 18px !important; padding: 0 !important; line-height: 8mm !important; }
+            #sendoTable th { height: 6mm !important; font-size: 11px !important; padding: 0 !important; }
+            /* tdの高さをautoにすることで、270mmの枠内でブラウザが自動的に限界までマスを引き伸ばします */
+            #sendoTable td { height: auto !important; font-size: 11px !important; padding: 0 1px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
 
-            /* 🌟 清掃表：1枚に絶対収める設定 */
-            #seisoTable { height: auto !important; margin: 0 !important; }
-            #seisoTable td { padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
-            .gondola-row { height: 58px !important; } 
-            .gondola-row-tall { height: 78px !important; } 
-            .gondola-row-short { height: 35px !important; } 
-            .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 10px !important; border: 2px solid #000 !important; background: #fff !important; line-height: 1.4 !important; }
+            /* 🌟 清掃表：絶対に2ページ目に行かないミリ指定（注意事項エリア分を引いて240mmの安全枠） */
+            #seisoTable { height: 240mm !important; max-height: 240mm !important; margin: 0 auto !important; }
+            #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
+            .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 5mm !important; border: 2px solid #000 !important; background: #fff !important; line-height: 1.4 !important; }
 
             /* 書類・証書 */
             .doc-page { width: 100% !important; padding: 10mm 15mm !important; margin: 0 !important; box-sizing: border-box !important; page-break-after: always; border: none !important; box-shadow: none !important; }
@@ -138,31 +135,24 @@
         }
 
         /* =========================================
-           4. 画像化モード（Export Mode）
-           印刷時と全く同じピクセル比率で出力するための設定
+           4. 【絶対解決】画像化モード用 CSS
         ========================================= */
-        body.export-mode {
-            width: 794px !important;
-            background: white !important;
-            margin: 0 !important; padding: 0 !important;
-        }
+        body.export-mode { width: 794px !important; background: white !important; margin: 0 !important; padding: 0 !important; }
         body.export-mode .header, body.export-mode .tabs, body.export-mode .controls, body.export-mode .action-btn, body.export-mode .print-control, body.export-mode .exclude-print { display: none !important; }
         body.export-mode .tab-content { display: none !important; }
-        body.export-mode .tab-content.active { display: block !important; width: 794px !important; padding: 20px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
+        body.export-mode .tab-content.active { display: block !important; width: 794px !important; padding: 15px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
         
         body.export-mode table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
         
-        body.export-mode #sendoTable { height: auto !important; margin: 0 !important; }
-        body.export-mode .title-cell { height: 30px !important; font-size: 16px !important; padding: 0 !important; line-height: 30px !important; }
-        body.export-mode #sendoTable th { height: 24px !important; font-size: 11px !important; padding: 0 !important; }
-        body.export-mode #sendoTable td { height: 18px !important; font-size: 11px !important; padding: 0 2px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
+        /* 270mmはWebピクセルだと約1020px */
+        body.export-mode #sendoTable { height: 1020px !important; max-height: 1020px !important; margin: 0 auto !important; }
+        body.export-mode .title-cell { height: 30px !important; font-size: 18px !important; padding: 0 !important; line-height: 30px !important; }
+        body.export-mode #sendoTable th { height: 22px !important; font-size: 11px !important; padding: 0 !important; }
+        body.export-mode #sendoTable td { height: auto !important; font-size: 11px !important; padding: 0 1px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
         
-        body.export-mode #seisoTable { height: auto !important; margin: 0 !important; }
-        body.export-mode #seisoTable td { padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
-        body.export-mode .gondola-row { height: 58px !important; } 
-        body.export-mode .gondola-row-tall { height: 78px !important; } 
-        body.export-mode .gondola-row-short { height: 35px !important; } 
-        body.export-mode .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 10px !important; border: 2px solid #000 !important; line-height: 1.4 !important; }
+        body.export-mode #seisoTable { height: 907px !important; max-height: 907px !important; margin: 0 auto !important; }
+        body.export-mode #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
+        body.export-mode .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 15px !important; border: 2px solid #000 !important; line-height: 1.4 !important; }
         
         body.export-mode .doc-page { width: 794px !important; min-height: 1123px !important; padding: 40px !important; box-sizing: border-box !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
         body.export-mode .diploma-print-area { width: 100% !important; height: 1083px !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
@@ -603,17 +593,15 @@
             btnElement.innerHTML = "⏳ 画像化しています...";
             btnElement.disabled = true;
 
-            // スクロールを一番上に戻す
             window.scrollTo(0, 0);
 
-            // 🌟 印刷と全く同じピクセル比率にする専用モードを起動
+            // 専用エクスポートモード（印刷時と同じレイアウト制限を適用）
             document.body.classList.add('export-mode');
             
             const container = document.getElementById('modalImageContainer');
             container.innerHTML = '';
 
             try {
-                // ブラウザがサイズを再計算するのを少し待つ
                 await new Promise(resolve => setTimeout(resolve, 300));
 
                 let targets = [];
@@ -627,7 +615,6 @@
 
                 for (let i = 0; i < targets.length; i++) {
                     const target = targets[i];
-                    // 🌟 A4用紙の幅（794px）を指定して撮影。縦幅はなりゆき（はみ出さないように計算済み）
                     const canvas = await html2canvas(target, { 
                         scale: 2, 
                         useCORS: true,
@@ -648,9 +635,7 @@
                 alert("画像化に失敗しました。");
                 console.error(err);
             } finally {
-                // 処理が終わったら元のiPad用レイアウトに戻す
                 document.body.classList.remove('export-mode');
-                
                 btnElement.innerHTML = originalText;
                 btnElement.disabled = false;
             }
