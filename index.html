@@ -46,7 +46,7 @@
         .no-border { border: none !important; }
 
         /* =========================================
-           2. 各種デザイン設定
+           2. 画面上のデザイン設定
         ========================================= */
         #sendoTable { border: 2px solid #333; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         #sendoTable th, #sendoTable td { text-align: center; vertical-align: middle; height: 26px; border: 1px solid #aaa; }
@@ -100,10 +100,10 @@
 
         /* =========================================
            3. 【超重要】そのまま印刷ボタン用の最適化
-           iPadのバグを防ぐため、%とmmのみで指定し、右見切れを根絶
+           iPadのバグを防ぐため、1マスごとのピクセル高さを完全固定
         ========================================= */
         @media print {
-            @page { size: A4 portrait; margin: 8mm !important; }
+            @page { size: A4 portrait; margin: 5mm !important; }
             body, html { margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             
             /* 不要なUIを全て隠す */
@@ -111,39 +111,61 @@
             .tab-content { display: none !important; }
             
             /* 表示中のタブのみフル幅で展開 */
-            .tab-content.active { 
-                display: block !important; 
-                width: 100% !important; 
-                padding: 0 !important; 
-                margin: 0 !important; 
-                border: none !important; 
-                box-shadow: none !important; 
-            }
+            .tab-content.active { display: block !important; width: 100% !important; padding: 0 !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
 
-            /* 右が切れる原因の最小幅(900px等)を完全解除 */
-            table.op-table { 
-                width: 100% !important; 
-                min-width: 0 !important; 
-                max-width: 100% !important; 
-                table-layout: fixed !important; 
-            }
+            /* テーブルの横幅設定 */
+            table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
 
-            /* 鮮度チェック表：A4用紙限界まで引き伸ばす */
-            #sendoTable { height: 265mm !important; margin: 0 !important; border: 2px solid #000 !important; }
-            #sendoTable th, #sendoTable td { height: auto !important; padding: 1px !important; font-size: 11px !important; word-break: break-all !important; white-space: normal !important;}
-            .title-cell { font-size: 18px !important; padding-bottom: 5px !important; margin: 0 !important; }
+            /* 🌟 鮮度チェック表：1枚に絶対収める「ピクセル完全固定」設定 */
+            #sendoTable { height: auto !important; margin: 0 !important; }
+            #sendoTable .title-cell { height: 30px !important; font-size: 16px !important; padding: 0 !important; margin: 0 !important; line-height: 30px !important; }
+            #sendoTable th { height: 24px !important; font-size: 11px !important; padding: 0 !important; }
+            /* 1行を18pxにロック(55行×18px=990px)。合計1044pxとなり、A4(1123px)に絶対収まります */
+            #sendoTable td { height: 18px !important; font-size: 11px !important; padding: 0 2px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important;}
 
-            /* 清掃表：A4用紙限界まで引き伸ばす */
-            #seisoTable { height: 240mm !important; margin: 0 !important; border: 2px solid #000 !important; }
-            #seisoTable td { padding: 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
-            .gondola-row, .gondola-row-tall, .gondola-row-short { height: auto !important; } 
-            .instruction-box { padding: 12px !important; font-size: 13px !important; margin-top: 10px !important; border: 2px solid #000 !important; }
+            /* 🌟 清掃表：1枚に絶対収める設定 */
+            #seisoTable { height: auto !important; margin: 0 !important; }
+            #seisoTable td { padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
+            .gondola-row { height: 58px !important; } 
+            .gondola-row-tall { height: 78px !important; } 
+            .gondola-row-short { height: 35px !important; } 
+            .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 10px !important; border: 2px solid #000 !important; background: #fff !important; line-height: 1.4 !important; }
 
             /* 書類・証書 */
-            .doc-page { width: 100% !important; min-height: 270mm !important; padding: 0 !important; margin: 0 !important; page-break-after: always; border: none !important; box-shadow: none !important;}
-            .diploma-print-area { width: 100% !important; height: 275mm !important; border: none !important; box-shadow: none !important; margin: 0 !important;}
+            .doc-page { width: 100% !important; padding: 10mm 15mm !important; margin: 0 !important; box-sizing: border-box !important; page-break-after: always; border: none !important; box-shadow: none !important; }
+            .diploma-print-area { width: 100% !important; height: 275mm !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
             .editable-line { border-bottom: none !important; }
         }
+
+        /* =========================================
+           4. 画像化モード（Export Mode）
+           印刷時と全く同じピクセル比率で出力するための設定
+        ========================================= */
+        body.export-mode {
+            width: 794px !important;
+            background: white !important;
+            margin: 0 !important; padding: 0 !important;
+        }
+        body.export-mode .header, body.export-mode .tabs, body.export-mode .controls, body.export-mode .action-btn, body.export-mode .print-control, body.export-mode .exclude-print { display: none !important; }
+        body.export-mode .tab-content { display: none !important; }
+        body.export-mode .tab-content.active { display: block !important; width: 794px !important; padding: 20px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
+        
+        body.export-mode table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
+        
+        body.export-mode #sendoTable { height: auto !important; margin: 0 !important; }
+        body.export-mode .title-cell { height: 30px !important; font-size: 16px !important; padding: 0 !important; line-height: 30px !important; }
+        body.export-mode #sendoTable th { height: 24px !important; font-size: 11px !important; padding: 0 !important; }
+        body.export-mode #sendoTable td { height: 18px !important; font-size: 11px !important; padding: 0 2px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
+        
+        body.export-mode #seisoTable { height: auto !important; margin: 0 !important; }
+        body.export-mode #seisoTable td { padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
+        body.export-mode .gondola-row { height: 58px !important; } 
+        body.export-mode .gondola-row-tall { height: 78px !important; } 
+        body.export-mode .gondola-row-short { height: 35px !important; } 
+        body.export-mode .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 10px !important; border: 2px solid #000 !important; line-height: 1.4 !important; }
+        
+        body.export-mode .doc-page { width: 794px !important; min-height: 1123px !important; padding: 40px !important; box-sizing: border-box !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
+        body.export-mode .diploma-print-area { width: 100% !important; height: 1083px !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
     </style>
 </head>
 <body>
@@ -295,15 +317,21 @@
 
     <!-- タブ3: 入社手続書類 -->
     <div id="onboarding" class="tab-content doc-wrapper">
-        <!-- ページ1 -->
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
             <div class="doc-title">労 働 条 件 通 知 書</div>
             <div style="font-size: 18px; margin-bottom: 20px;">
                 <span class="fill-blank" contenteditable="true" data-key="doc1_emp_name_top" style="min-width: 150px; display: inline-block;"></span> 殿
             </div>
+            
             <table class="doc-table">
-                <tr><th>雇用契約期間</th><td><span class="fill-blank" contenteditable="true" data-key="doc1_dy2" style="min-width: 30px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm2" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd2" style="min-width: 20px;"></span> 日 ～ <span class="fill-blank" contenteditable="true" data-key="doc1_dy3" style="min-width: 30px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm3" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd3" style="min-width: 20px;"></span> 日 期間の定め有り<br>ただし、更新する場合がある</td></tr>
+                <tr>
+                    <th>雇用契約期間</th>
+                    <td>
+                        <span class="fill-blank" contenteditable="true" data-key="doc1_dy2" style="min-width: 30px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm2" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd2" style="min-width: 20px;"></span> 日 ～ <span class="fill-blank" contenteditable="true" data-key="doc1_dy3" style="min-width: 30px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm3" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd3" style="min-width: 20px;"></span> 日 期間の定め有り<br>
+                        ただし、更新する場合がある
+                    </td>
+                </tr>
                 <tr><th>雇用形態</th><td><span class="fill-blank" contenteditable="true" data-key="doc1_emp" style="min-width: 150px; border:none; text-align:left;">パートタイマー ・ 有期契約社員</span></td></tr>
                 <tr><th>就業場所</th><td>使用者の指定する店舗<br>※変更の範囲も同様とする</td></tr>
                 <tr><th>仕事内容</th><td>商品の発注、品出し、陳列、レジ、接客販売、清掃、予約活動全般、その他店舗の営業に関わる業務<br>※変更の範囲も同様とする</td></tr>
@@ -317,9 +345,11 @@
                 <tr><th>退職に関する事項</th><td>1. 満65歳とし、定年年齢に達した日の直後の賃金締め切り日をもって退職とする<br>2. 自己の都合により退職しようとするときは、1ヶ月前までに届け出ること</td></tr>
                 <tr><th>その他</th><td>上記以外の労働条件の詳細については、就業規則または、関係諸法令を参考にその都度会社が取り決めるものとする。</td></tr>
             </table>
+
             <div class="doc-date" style="text-align: right; margin-top: 10px; margin-bottom: 30px;">
                 <span class="fill-blank" contenteditable="true" data-key="doc1_dy1" style="min-width: 40px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm1" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd1" style="min-width: 20px;"></span> 日
             </div>
+            
             <div style="margin-left: auto; width: 450px; font-size: 16px; line-height: 2;">
                 (使用者)<br>
                 <div style="display: flex; margin-top: 5px;"><div style="width: 90px;">所在地</div><div contenteditable="true" data-key="doc1_loc" style="flex: 1; border-bottom: 1px solid #000;">愛知県尾張旭市晴丘町池上125番1</div></div>
@@ -328,7 +358,6 @@
             </div>
         </div>
 
-        <!-- ページ2 -->
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
             <div class="doc-title"><span class="doc-title-line">誓　　約　　書</span></div>
@@ -345,7 +374,6 @@
             </div>
         </div>
 
-        <!-- ページ3 -->
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
             <div class="doc-title"><span class="doc-title-line">就　業　承　諾　書</span></div>
@@ -365,7 +393,6 @@
             </div>
         </div>
 
-        <!-- ページ4 -->
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
             <div class="doc-title"><span class="doc-title-line">身　元　保　証　契　約　書</span></div>
@@ -390,21 +417,47 @@
             </div>
         </div>
 
-        <!-- ページ5 -->
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
+            
             <div style="text-align: center;">
                 <div style="font-size: 18px; margin-bottom: 30px; font-weight: bold; border-bottom: 1px solid #000; display: inline-block; padding-bottom: 5px; text-align: center;">
                     <span class="fill-blank" contenteditable="true" data-key="doc5_name" style="min-width: 150px; border:none; border-bottom:1px solid #999;"></span> さんの保護者様へ
                 </div>
             </div>
+
             <div class="doc-body" style="line-height: 2.2; text-align: center;">
-                <p>お世話になります。セブンイレブン尾張旭晴丘町池上店の蟹江と申します。<br>この度は、大切なお子様を当店舗の従業員として採用させて頂きました。<br>これから責任を持って教育に当たらせて頂きますので、どうぞ宜しくお願い致します。</p>
-                <p>さて、セブンイレブンでは現在『近くて便利』という標語を掲げ、<br>近隣の方々にいつも便利に利用して頂けるよう、<br>商品の販売だけでなく様々なサービスの提供を行っております。<br>その中で、お子様にはレジでの接客だけでなく、商品の管理や発注、<br>清掃業務や商品のお勧めなど、多岐にわたる業務を経験して頂きます。<br>これらの職務は、新たな職体験の一つというだけでなく、<br>今後の社会人生活においても重要な指針になると考えております。</p>
-                <p>時には難しい場面に遭遇し、壁に当たる事もあるかと思いますので、<br>そのような時には是非とも温かく励ましてあげて下さい。<br>また、お子様が当店で頑張って職務に励んでいる事について、<br>陰ながら応援して頂けましたら幸いでございます。<br>もちろん学業が最優先でございますので、<br>店舗としても出来る限りのバックアップをさせて頂きます。<br>気になる点などがございましたら、いつでもご意見を頂きますようお願い申し上げます。</p>
-                <p>末筆ながら、皆様のご健康とご多幸を心よりお祈り申し上げます。</p>
+                <p>
+                    お世話になります。セブンイレブン尾張旭晴丘町池上店の蟹江と申します。<br>
+                    この度は、大切なお子様を当店舗の従業員として採用させて頂きました。<br>
+                    これから責任を持って教育に当たらせて頂きますので、どうぞ宜しくお願い致します。
+                </p>
+                <p>
+                    さて、セブンイレブンでは現在『近くて便利』という標語を掲げ、<br>
+                    近隣の方々にいつも便利に利用して頂けるよう、<br>
+                    商品の販売だけでなく様々なサービスの提供を行っております。<br>
+                    その中で、お子様にはレジでの接客だけでなく、商品の管理や発注、<br>
+                    清掃業務や商品のお勧めなど、多岐にわたる業務を経験して頂きます。<br>
+                    これらの職務は、新たな職体験の一つというだけでなく、<br>
+                    今後の社会人生活においても重要な指針になると考えております。
+                </p>
+                <p>
+                    時には難しい場面に遭遇し、壁に当たる事もあるかと思いますので、<br>
+                    そのような時には是非とも温かく励ましてあげて下さい。<br>
+                    また、お子様が当店で頑張って職務に励んでいる事について、<br>
+                    陰ながら応援して頂けましたら幸いでございます。<br>
+                    もちろん学業が最優先でございますので、<br>
+                    店舗としても出来る限りのバックアップをさせて頂きます。<br>
+                    気になる点などがございましたら、いつでもご意見を頂きますようお願い申し上げます。
+                </p>
+                <p>
+                    末筆ながら、皆様のご健康とご多幸を心よりお祈り申し上げます。
+                </p>
             </div>
-            <div style="text-align: right; margin-top: 50px; font-size: 16px;">セブンイレブン尾張旭晴丘町池上店<br><br><br><br></div>
+            
+            <div style="text-align: right; margin-top: 50px; font-size: 16px;">
+                セブンイレブン尾張旭晴丘町池上店<br><br><br><br>
+            </div>
         </div>
     </div>
 
@@ -412,9 +465,13 @@
     <div id="diploma" class="tab-content" style="background-color: var(--bg-color);">
         <p class="exclude-print" style="text-align:center; color: #d93025; font-weight:bold;">※画面上の点線枠は印刷位置のガイドです。印刷時は「文字だけ」が印字されます。</p>
         <div class="diploma-print-area">
+            
             <div class="brush-text dip-number" contenteditable="true" data-key="d_num">第 711 号</div>
             <div class="brush-text dip-title">卒業証書</div>
-            <div class="brush-text dip-name"><span class="editable-line" contenteditable="true" data-key="d_name">（スタッフ氏名を入力）</span> 殿</div>
+            <div class="brush-text dip-name">
+                <span class="editable-line" contenteditable="true" data-key="d_name">（スタッフ氏名を入力）</span> 殿
+            </div>
+
             <div class="brush-text dip-main">
                 <div contenteditable="true" data-key="d_t1">あなたはセブンイレブン尾張旭晴丘町池上店において</div>
                 <div contenteditable="true" data-key="d_t2">長きにわたり学業と両立しながら誠実に勤務され</div>
@@ -423,8 +480,17 @@
                 <div contenteditable="true" data-key="d_t5">感謝の意を表するとともに これを賞します</div>
                 <div contenteditable="true" data-key="d_t6">今後のご健勝とご活躍を心よりお祈り申し上げます</div>
             </div>
-            <div class="brush-text dip-date">令和 <span class="editable-line" contenteditable="true" data-key="d_y"></span> 年 <span class="editable-line" contenteditable="true" data-key="d_m"></span> 月 <span class="editable-line" contenteditable="true" data-key="d_d"></span> 日</div>
-            <div class="brush-text dip-footer">セブンイレブン尾張旭晴丘町池上店<br>オーナー 蟹江 明雄</div>
+
+            <div class="brush-text dip-date">
+                令和 <span class="editable-line" contenteditable="true" data-key="d_y"></span> 年 
+                <span class="editable-line" contenteditable="true" data-key="d_m"></span> 月 
+                <span class="editable-line" contenteditable="true" data-key="d_d"></span> 日
+            </div>
+
+            <div class="brush-text dip-footer">
+                セブンイレブン尾張旭晴丘町池上店<br>
+                オーナー 蟹江 明雄
+            </div>
         </div>
     </div>
 
@@ -472,6 +538,7 @@
                 if(m === currentMonth) option.selected = true;
                 monthSelect.appendChild(option);
             }
+            
             generateSendoTable();
         }
 
@@ -528,7 +595,6 @@
             });
         }
 
-        // 💡修正：画面を一切操作せず、裏側で「確実なA4キャンバス」を作ってから撮影する最強の方式
         async function exportToImage(btnElement) {
             const activeTab = document.querySelector('.tab-content.active');
             if (!activeTab) return;
@@ -537,13 +603,18 @@
             btnElement.innerHTML = "⏳ 画像化しています...";
             btnElement.disabled = true;
 
+            // スクロールを一番上に戻す
+            window.scrollTo(0, 0);
+
+            // 🌟 印刷と全く同じピクセル比率にする専用モードを起動
+            document.body.classList.add('export-mode');
+            
             const container = document.getElementById('modalImageContainer');
             container.innerHTML = '';
 
             try {
-                // A4サイズのピクセル比率（縦長）
-                const A4_WIDTH = 1000;
-                const A4_HEIGHT = 1414;
+                // ブラウザがサイズを再計算するのを少し待つ
+                await new Promise(resolve => setTimeout(resolve, 300));
 
                 let targets = [];
                 if (activeTab.id === 'onboarding') {
@@ -555,68 +626,14 @@
                 }
 
                 for (let i = 0; i < targets.length; i++) {
-                    const originalNode = targets[i];
-                    
-                    // 1. 裏側に透明なA4の箱を作る
-                    const wrapper = document.createElement('div');
-                    wrapper.style.position = 'absolute';
-                    wrapper.style.top = '0';
-                    wrapper.style.left = '0';
-                    wrapper.style.zIndex = '-9999';
-                    wrapper.style.width = A4_WIDTH + 'px';
-                    wrapper.style.height = A4_HEIGHT + 'px';
-                    wrapper.style.backgroundColor = 'white';
-                    wrapper.style.boxSizing = 'border-box';
-                    wrapper.style.padding = '30px'; 
-                    
-                    // 2. 現在の表のコピーを作って箱に入れる
-                    const clone = originalNode.cloneNode(true);
-                    
-                    // コピーの中の不要なボタンを消す
-                    clone.querySelectorAll('.controls, .print-control, .exclude-print').forEach(el => el.style.display = 'none');
-                    
-                    // 3. 箱の中で限界まで表を引き伸ばす
-                    if (activeTab.id === 'sendo') {
-                        const table = clone.querySelector('table');
-                        if(table) {
-                            table.style.width = '100%';
-                            table.style.minWidth = '0'; // これが超重要
-                            table.style.height = '1250px'; // 限界まで伸ばす
-                            table.style.tableLayout = 'fixed';
-                        }
-                    } else if (activeTab.id === 'seiso') {
-                        const table = clone.querySelector('table');
-                        if(table) {
-                            table.style.width = '100%';
-                            table.style.minWidth = '0';
-                            table.style.height = '1050px'; // 限界まで伸ばす
-                            table.style.tableLayout = 'fixed';
-                        }
-                    } else if (activeTab.id === 'onboarding' || activeTab.id === 'diploma') {
-                        clone.style.width = '100%';
-                        clone.style.height = '100%';
-                        clone.style.padding = '0';
-                        clone.style.margin = '0';
-                        clone.style.boxShadow = 'none';
-                        clone.style.border = 'none';
-                    }
-
-                    wrapper.appendChild(clone);
-                    document.body.appendChild(wrapper);
-
-                    // 4. ブラウザが形を整えるのをほんの少し待つ
-                    await new Promise(r => setTimeout(r, 150));
-
-                    // 5. 撮影
-                    const canvas = await html2canvas(wrapper, { 
-                        scale: 1.5,
+                    const target = targets[i];
+                    // 🌟 A4用紙の幅（794px）を指定して撮影。縦幅はなりゆき（はみ出さないように計算済み）
+                    const canvas = await html2canvas(target, { 
+                        scale: 2, 
                         useCORS: true,
-                        backgroundColor: '#ffffff'
+                        backgroundColor: '#ffffff',
+                        width: 794
                     });
-
-                    // 6. 用済みの箱を捨てる
-                    document.body.removeChild(wrapper);
-
                     const imgElement = document.createElement('img');
                     imgElement.src = canvas.toDataURL('image/png');
                     imgElement.style.maxWidth = '100%';
@@ -631,6 +648,9 @@
                 alert("画像化に失敗しました。");
                 console.error(err);
             } finally {
+                // 処理が終わったら元のiPad用レイアウトに戻す
+                document.body.classList.remove('export-mode');
+                
                 btnElement.innerHTML = originalText;
                 btnElement.disabled = false;
             }
