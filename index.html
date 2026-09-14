@@ -98,39 +98,39 @@
         .dip-date { top: 240mm; left: 30mm; font-size: 16pt; }
         .dip-footer { top: 260mm; right: 30mm; font-size: 18pt; line-height: 2; text-align: right; }
 
-
         /* =========================================
            3. 【絶対解決】そのまま印刷（iPad）用 CSS
+           ミリや％ではなく「ピクセル」で数学的に高さをロック
         ========================================= */
         @media print {
-            /* 余白をリセットし、iPadが変な計算をしないようにする */
             @page { size: A4 portrait; margin: 0 !important; }
             body, html { margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             
-            /* 不要なUIを全て隠す */
             .header, .tabs, .controls, .action-btn, .print-control, .exclude-print { display: none !important; }
             .tab-content { display: none !important; }
             
-            /* タブエリアはA4いっぱいに展開 */
-            .tab-content.active { display: block !important; width: 100% !important; padding: 5mm !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
+            .tab-content.active { display: block !important; width: 100% !important; padding: 15px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
             
-            table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
+            table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; page-break-inside: avoid !important; }
 
-            /* 🌟 鮮度チェック表：絶対に2ページ目に行かないミリ指定（A4=297mmに対し270mmの安全枠） */
-            #sendoTable { height: 270mm !important; max-height: 270mm !important; margin: 0 auto !important; }
-            #sendoTable .title-cell { height: 8mm !important; font-size: 18px !important; padding: 0 !important; line-height: 8mm !important; }
-            #sendoTable th { height: 6mm !important; font-size: 11px !important; padding: 0 !important; }
-            /* tdの高さをautoにすることで、270mmの枠内でブラウザが自動的に限界までマスを引き伸ばします */
-            #sendoTable td { height: auto !important; font-size: 11px !important; padding: 0 1px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
+            /* 🌟 はみ出しストッパー（鮮度チェック・清掃表のみ適用） */
+            #sendo, #seiso { overflow: hidden !important; max-height: 1100px !important; }
 
-            /* 🌟 清掃表：絶対に2ページ目に行かないミリ指定（注意事項エリア分を引いて240mmの安全枠） */
-            #seisoTable { height: 240mm !important; max-height: 240mm !important; margin: 0 auto !important; }
+            /* 🌟 鮮度チェック表：915pxに完全固定（A4の1123pxより200px以上小さい絶対安全サイズ） */
+            #sendoTable { height: 915px !important; max-height: 915px !important; margin: 0 auto !important; }
+            #sendoTable .title-cell { height: 20px !important; font-size: 16px !important; padding: 0 !important; line-height: 20px !important; }
+            #sendoTable th { height: 15px !important; font-size: 11px !important; padding: 0 !important; line-height: 15px !important; }
+            /* 16px × 55行 = 880px */
+            #sendoTable td { height: 16px !important; font-size: 11px !important; padding: 0 1px !important; line-height: 16px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
+
+            /* 🌟 清掃表：絶対に1ページに収めるピクセル固定 */
+            #seisoTable { height: 850px !important; max-height: 850px !important; margin: 0 auto !important; }
             #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
-            .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 5mm !important; border: 2px solid #000 !important; background: #fff !important; line-height: 1.4 !important; }
+            .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 15px !important; border: 2px solid #000 !important; background: #fff !important; line-height: 1.4 !important; }
 
-            /* 書類・証書 */
-            .doc-page { width: 100% !important; padding: 10mm 15mm !important; margin: 0 !important; box-sizing: border-box !important; page-break-after: always; border: none !important; box-shadow: none !important; }
-            .diploma-print-area { width: 100% !important; height: 275mm !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
+            /* 書類・証書（ここは複数ページなのでoverflow設定はしない） */
+            .doc-page { width: 100% !important; padding: 30px 40px !important; margin: 0 !important; box-sizing: border-box !important; page-break-after: always; border: none !important; box-shadow: none !important; }
+            .diploma-print-area { width: 100% !important; height: 1050px !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
             .editable-line { border-bottom: none !important; }
         }
 
@@ -144,13 +144,14 @@
         
         body.export-mode table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
         
-        /* 270mmはWebピクセルだと約1020px */
-        body.export-mode #sendoTable { height: 1020px !important; max-height: 1020px !important; margin: 0 auto !important; }
-        body.export-mode .title-cell { height: 30px !important; font-size: 18px !important; padding: 0 !important; line-height: 30px !important; }
-        body.export-mode #sendoTable th { height: 22px !important; font-size: 11px !important; padding: 0 !important; }
-        body.export-mode #sendoTable td { height: auto !important; font-size: 11px !important; padding: 0 1px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
+        /* 印刷時と全く同じピクセル高さを適用 */
+        body.export-mode #sendo, body.export-mode #seiso { overflow: hidden !important; max-height: 1100px !important; }
+        body.export-mode #sendoTable { height: 915px !important; max-height: 915px !important; margin: 0 auto !important; }
+        body.export-mode .title-cell { height: 20px !important; font-size: 16px !important; padding: 0 !important; line-height: 20px !important; }
+        body.export-mode #sendoTable th { height: 15px !important; font-size: 11px !important; padding: 0 !important; line-height: 15px !important; }
+        body.export-mode #sendoTable td { height: 16px !important; font-size: 11px !important; padding: 0 1px !important; line-height: 16px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
         
-        body.export-mode #seisoTable { height: 907px !important; max-height: 907px !important; margin: 0 auto !important; }
+        body.export-mode #seisoTable { height: 850px !important; max-height: 850px !important; margin: 0 auto !important; }
         body.export-mode #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
         body.export-mode .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 15px !important; border: 2px solid #000 !important; line-height: 1.4 !important; }
         
@@ -595,7 +596,6 @@
 
             window.scrollTo(0, 0);
 
-            // 専用エクスポートモード（印刷時と同じレイアウト制限を適用）
             document.body.classList.add('export-mode');
             
             const container = document.getElementById('modalImageContainer');
