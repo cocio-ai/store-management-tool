@@ -100,7 +100,6 @@
 
         /* =========================================
            3. 【絶対解決】そのまま印刷（iPad）用 CSS
-           iPadの非表示マージンを避けるため、高さを大幅に縮小
         ========================================= */
         @media print {
             @page { size: A4 portrait; margin: 0 !important; }
@@ -116,9 +115,13 @@
             /* 🌟 鮮度チェック表：大幅縮小し、絶対に1枚に収める */
             #sendoTable { height: 230mm !important; max-height: 230mm !important; margin: 0 auto !important; }
             #sendoTable .title-cell { height: 15px !important; font-size: 14px !important; padding: 0 !important; line-height: 15px !important; border-bottom: 2px solid #000 !important; }
-            #sendoTable th { height: 12px !important; font-size: 10px !important; padding: 0 !important; line-height: 12px !important; }
-            /* 13px × 55行 = 715px。余裕で収まります */
+            #sendoTable th { height: 12px !important; font-size: 10px !important; padding: 0 !important; line-height: 12px !important; border: 1px solid #000 !important; }
             #sendoTable td { height: 13px !important; font-size: 10px !important; padding: 0 !important; line-height: 13px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
+
+            /* 🌟 鮮度チェック表：見やすさを向上させる太線の復活 */
+            #sendoTable th:nth-child(3n), #sendoTable td:nth-child(3n) { border-right: 2px solid #000 !important; }
+            #sendoTable thead tr:last-child th { border-bottom: 2px solid #000 !important; }
+            #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #000 !important; }
 
             /* 🌟 清掃表：大幅縮小し、絶対に1枚に収める */
             #seisoTable { height: 200mm !important; max-height: 200mm !important; margin: 0 auto !important; }
@@ -146,9 +149,14 @@
         
         body.export-mode #sendoTable { height: 869px !important; max-height: 869px !important; margin: 0 auto !important; }
         body.export-mode .title-cell { height: 20px !important; font-size: 16px !important; padding: 0 !important; line-height: 20px !important; border-bottom: 2px solid #000 !important; }
-        body.export-mode #sendoTable th { height: 15px !important; font-size: 11px !important; padding: 0 !important; line-height: 15px !important; }
+        body.export-mode #sendoTable th { height: 15px !important; font-size: 11px !important; padding: 0 !important; line-height: 15px !important; border: 1px solid #000 !important; }
         body.export-mode #sendoTable td { height: 15px !important; font-size: 11px !important; padding: 0 !important; line-height: 15px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
         
+        /* 🌟 画像化時も太線を復活 */
+        body.export-mode #sendoTable th:nth-child(3n), body.export-mode #sendoTable td:nth-child(3n) { border-right: 2px solid #000 !important; }
+        body.export-mode #sendoTable thead tr:last-child th { border-bottom: 2px solid #000 !important; }
+        body.export-mode #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #000 !important; }
+
         body.export-mode #seisoTable { height: 755px !important; max-height: 755px !important; margin: 0 auto !important; }
         body.export-mode #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
         body.export-mode .gondola-row { height: 45px !important; }
@@ -311,7 +319,7 @@
     <div id="onboarding" class="tab-content doc-wrapper">
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
-            <div class="doc-title">労 働 条 件 通 知 書</div>
+            <div class="doc-title">労 働 条 件 通রিটি 知 書</div>
             <div style="font-size: 18px; margin-bottom: 20px;">
                 <span class="fill-blank" contenteditable="true" data-key="doc1_emp_name_top" style="min-width: 150px; display: inline-block;"></span> 殿
             </div>
