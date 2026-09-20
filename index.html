@@ -108,32 +108,35 @@
             .header, .tabs, .controls, .action-btn, .print-control, .exclude-print { display: none !important; }
             .tab-content { display: none !important; }
             
-            .tab-content.active { display: block !important; width: 100% !important; padding: 10px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
+            .tab-content.active { display: block !important; width: 100% !important; padding: 15px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
             
-            table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; page-break-inside: avoid !important; }
+            table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #333 !important; page-break-inside: avoid !important; }
 
-            /* 🌟 鮮度チェック表：大幅縮小し、絶対に1枚に収める */
-            #sendoTable { height: 230mm !important; max-height: 230mm !important; margin: 0 auto !important; }
-            #sendoTable .title-cell { height: 15px !important; font-size: 14px !important; padding: 0 !important; line-height: 15px !important; border-bottom: 2px solid #000 !important; }
-            #sendoTable th { height: 12px !important; font-size: 10px !important; padding: 0 !important; line-height: 12px !important; border: 1px solid #000 !important; }
-            #sendoTable td { height: 13px !important; font-size: 10px !important; padding: 0 !important; line-height: 13px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
+            /* 🌟 はみ出しストッパー */
+            #sendo, #seiso { overflow: hidden !important; max-height: 1100px !important; }
 
-            /* 🌟 鮮度チェック表：見やすさを向上させる太線の復活 */
-            #sendoTable th:nth-child(3n), #sendoTable td:nth-child(3n) { border-right: 2px solid #000 !important; }
-            #sendoTable thead tr:last-child th { border-bottom: 2px solid #000 !important; }
-            #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #000 !important; }
+            /* 🌟 鮮度チェック表：見やすさとサイズ制限の両立 */
+            #sendoTable { height: 950px !important; max-height: 950px !important; margin: 0 auto !important; }
+            #sendoTable .title-cell { height: 25px !important; font-size: 16px !important; padding: 0 !important; line-height: 25px !important; border-bottom: none !important; }
+            #sendoTable th { height: 18px !important; font-size: 11px !important; padding: 0 !important; line-height: 18px !important; border: 1px solid #aaa !important; background: #f0f0f0 !important; }
+            #sendoTable td { height: 16px !important; font-size: 11px !important; padding: 0 2px !important; line-height: 16px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #aaa !important; }
 
-            /* 🌟 清掃表：大幅縮小し、絶対に1枚に収める */
-            #seisoTable { height: 200mm !important; max-height: 200mm !important; margin: 0 auto !important; }
-            #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 10px !important; border: 1px solid #333 !important; }
-            .gondola-row { height: 45px !important; }
-            .gondola-row-tall { height: 60px !important; }
-            .gondola-row-short { height: 30px !important; }
-            .instruction-box { padding: 8px 12px !important; font-size: 11px !important; margin-top: 10px !important; border: 2px solid #000 !important; background: #fff !important; line-height: 1.4 !important; }
+            /* 🌟 鮮度チェック表：メリハリのある罫線を完全復活 */
+            #sendoTable th:nth-child(3n), #sendoTable td:nth-child(3n) { border-right: 2px solid #333 !important; }
+            #sendoTable thead tr:last-child th { border-bottom: 2px solid #333 !important; }
+            #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #333 !important; }
+
+            /* 🌟 清掃表：見やすさとサイズ制限の両立 */
+            #seisoTable { height: 850px !important; max-height: 850px !important; margin: 0 auto !important; }
+            #seisoTable td { height: auto !important; padding: 4px !important; font-size: 12px !important; border: 1px solid #888 !important; }
+            .gondola-row { height: 50px !important; }
+            .gondola-row-tall { height: 65px !important; }
+            .gondola-row-short { height: 35px !important; }
+            .instruction-box { padding: 10px 15px !important; font-size: 13px !important; margin-top: 15px !important; border: 2px solid #000 !important; background: #fff !important; line-height: 1.5 !important; }
 
             /* 書類・証書 */
             .doc-page { width: 100% !important; padding: 30px 40px !important; margin: 0 !important; box-sizing: border-box !important; page-break-after: always; border: none !important; box-shadow: none !important; }
-            .diploma-print-area { width: 100% !important; height: 280mm !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
+            .diploma-print-area { width: 100% !important; height: 1050px !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
             .editable-line { border-bottom: none !important; }
         }
 
@@ -145,24 +148,27 @@
         body.export-mode .tab-content { display: none !important; }
         body.export-mode .tab-content.active { display: block !important; width: 794px !important; padding: 15px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
         
-        body.export-mode table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #000 !important; }
+        body.export-mode table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #333 !important; }
         
-        body.export-mode #sendoTable { height: 869px !important; max-height: 869px !important; margin: 0 auto !important; }
-        body.export-mode .title-cell { height: 20px !important; font-size: 16px !important; padding: 0 !important; line-height: 20px !important; border-bottom: 2px solid #000 !important; }
-        body.export-mode #sendoTable th { height: 15px !important; font-size: 11px !important; padding: 0 !important; line-height: 15px !important; border: 1px solid #000 !important; }
-        body.export-mode #sendoTable td { height: 15px !important; font-size: 11px !important; padding: 0 !important; line-height: 15px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #000 !important; }
+        body.export-mode #sendo, body.export-mode #seiso { overflow: hidden !important; max-height: 1100px !important; }
         
-        /* 🌟 画像化時も太線を復活 */
-        body.export-mode #sendoTable th:nth-child(3n), body.export-mode #sendoTable td:nth-child(3n) { border-right: 2px solid #000 !important; }
-        body.export-mode #sendoTable thead tr:last-child th { border-bottom: 2px solid #000 !important; }
-        body.export-mode #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #000 !important; }
+        /* 🌟 画像化時もフォントサイズとグレーの細線を復活 */
+        body.export-mode #sendoTable { height: 950px !important; max-height: 950px !important; margin: 0 auto !important; }
+        body.export-mode .title-cell { height: 25px !important; font-size: 16px !important; padding: 0 !important; line-height: 25px !important; border-bottom: none !important; }
+        body.export-mode #sendoTable th { height: 18px !important; font-size: 11px !important; padding: 0 !important; line-height: 18px !important; border: 1px solid #aaa !important; background: #f0f0f0 !important; }
+        body.export-mode #sendoTable td { height: 16px !important; font-size: 11px !important; padding: 0 2px !important; line-height: 16px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #aaa !important; }
+        
+        /* 🌟 画像化時もメリハリのある太線を完全復活 */
+        body.export-mode #sendoTable th:nth-child(3n), body.export-mode #sendoTable td:nth-child(3n) { border-right: 2px solid #333 !important; }
+        body.export-mode #sendoTable thead tr:last-child th { border-bottom: 2px solid #333 !important; }
+        body.export-mode #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #333 !important; }
 
-        body.export-mode #seisoTable { height: 755px !important; max-height: 755px !important; margin: 0 auto !important; }
-        body.export-mode #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #333 !important; }
-        body.export-mode .gondola-row { height: 45px !important; }
-        body.export-mode .gondola-row-tall { height: 60px !important; }
-        body.export-mode .gondola-row-short { height: 30px !important; }
-        body.export-mode .instruction-box { padding: 8px 12px !important; font-size: 12px !important; margin-top: 15px !important; border: 2px solid #000 !important; line-height: 1.4 !important; }
+        body.export-mode #seisoTable { height: 850px !important; max-height: 850px !important; margin: 0 auto !important; }
+        body.export-mode #seisoTable td { height: auto !important; padding: 4px !important; font-size: 12px !important; border: 1px solid #888 !important; }
+        body.export-mode .gondola-row { height: 50px !important; }
+        body.export-mode .gondola-row-tall { height: 65px !important; }
+        body.export-mode .gondola-row-short { height: 35px !important; }
+        body.export-mode .instruction-box { padding: 10px 15px !important; font-size: 13px !important; margin-top: 15px !important; border: 2px solid #000 !important; line-height: 1.5 !important; }
         
         body.export-mode .doc-page { width: 794px !important; min-height: 1123px !important; padding: 40px !important; box-sizing: border-box !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
         body.export-mode .diploma-print-area { width: 100% !important; height: 1083px !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
@@ -319,7 +325,7 @@
     <div id="onboarding" class="tab-content doc-wrapper">
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
-            <div class="doc-title">労 働 条 件 通রিটি 知 書</div>
+            <div class="doc-title">労 働 条 件 通 知 書</div>
             <div style="font-size: 18px; margin-bottom: 20px;">
                 <span class="fill-blank" contenteditable="true" data-key="doc1_emp_name_top" style="min-width: 150px; display: inline-block;"></span> 殿
             </div>
