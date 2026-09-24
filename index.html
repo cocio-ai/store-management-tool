@@ -119,7 +119,6 @@
             #sendoTable { height: 850px !important; max-height: 850px !important; margin: 0 auto !important; }
             #sendoTable .title-cell { height: 20px !important; font-size: 15px !important; padding: 0 !important; line-height: 20px !important; border-bottom: none !important; }
             #sendoTable th { height: 14px !important; font-size: 10px !important; padding: 0 !important; line-height: 14px !important; border: 1px solid #aaa !important; background: #f0f0f0 !important; }
-            /* 14px × 55行 ＝ 770px（全体で850pxに絶対収まる計算） */
             #sendoTable td { height: 14px !important; font-size: 10px !important; padding: 0 1px !important; line-height: 14px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #aaa !important; }
 
             /* 🌟 鮮度チェック表：メリハリのある罫線を完全維持 */
@@ -129,7 +128,12 @@
 
             /* 🌟 清掃表：見やすさとサイズ制限の両立 */
             #seisoTable { height: 820px !important; max-height: 820px !important; margin: 0 auto !important; }
-            #seisoTable td { height: auto !important; padding: 3px !important; font-size: 11px !important; border: 1px solid #888 !important; }
+            #seisoTable td { height: auto !important; padding: 3px !important; font-size: 11px !important; border: 1px solid #888; }
+            
+            /* 🌟 修正：清掃表の空白マスと点線を復活させるルールを追加 */
+            #seisoTable td.no-border { border: none !important; }
+            #seisoTable td.bg-aisle { border: 1px dashed #ddd !important; }
+
             .gondola-row { height: 48px !important; }
             .gondola-row-tall { height: 63px !important; }
             .gondola-row-short { height: 33px !important; }
@@ -164,7 +168,12 @@
         body.export-mode #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #333 !important; }
 
         body.export-mode #seisoTable { height: 820px !important; max-height: 820px !important; margin: 0 auto !important; }
-        body.export-mode #seisoTable td { height: auto !important; padding: 3px !important; font-size: 11px !important; border: 1px solid #888 !important; }
+        body.export-mode #seisoTable td { height: auto !important; padding: 3px !important; font-size: 11px !important; border: 1px solid #888; }
+        
+        /* 🌟 修正：清掃表の空白マスと点線を画像化時も復活させるルールを追加 */
+        body.export-mode #seisoTable td.no-border { border: none !important; }
+        body.export-mode #seisoTable td.bg-aisle { border: 1px dashed #ddd !important; }
+
         body.export-mode .gondola-row { height: 48px !important; }
         body.export-mode .gondola-row-tall { height: 63px !important; }
         body.export-mode .gondola-row-short { height: 33px !important; }
