@@ -100,7 +100,7 @@
         .dip-footer { top: 260mm; right: 30mm; font-size: 18pt; line-height: 2; text-align: right; }
 
         /* =========================================
-           3. 【絶対解決】そのまま印刷（iPad）用 CSS
+           3. 印刷（iPad）用 CSS：自然な改ページを促す
         ========================================= */
         @media print {
             @page { size: A4 portrait; margin: 0 !important; }
@@ -134,29 +134,24 @@
             .instruction-box h4 { margin: 0 0 3px 0 !important; font-size: 13px !important; }
             .instruction-box li { margin-bottom: 2px !important; }
 
-            /* 🌟 入社手続書類：確実に1ページに収めるための強力な制限 */
+            /* 入社手続書類：高さ固定を解除し、自然に収める */
             .doc-page { 
                 width: 100% !important; 
-                height: 980px !important; /* A4物理限界を絶対に超えさせない */
-                max-height: 980px !important; 
-                padding: 15px 30px !important; /* 余白を削る */
-                margin: 0 auto !important; 
+                height: auto !important; /* ピクセル固定を解除 */
+                padding: 15mm 20mm !important; /* 印刷に強いミリメートル指定 */
+                margin: 0 !important; 
                 box-sizing: border-box !important; 
-                page-break-after: always !important; 
+                page-break-after: always !important; /* ここで確実にページを割る */
+                page-break-inside: avoid !important; /* 書類の途中分断を禁止 */
                 border: none !important; 
                 box-shadow: none !important; 
-                overflow: hidden !important; /* はみ出しをカット */
+                overflow: visible !important; 
             }
-            .doc-title { font-size: 16px !important; margin-bottom: 10px !important; }
-            .doc-table { margin-bottom: 10px !important; margin-top: 5px !important; }
-            .doc-table th, .doc-table td { 
-                padding: 4px 6px !important; /* 表の余白を極限まで削る */
-                font-size: 10px !important; /* テキストの折り返しを防ぐ */
-                line-height: 1.2 !important; 
-            }
-            .doc-body p { font-size: 12px !important; line-height: 1.3 !important; margin: 4px 0 !important; }
-            .doc-sign { font-size: 11px !important; }
-            .doc-sign-row { margin-bottom: 5px !important; }
+            .doc-title { font-size: 14pt !important; margin-bottom: 15px !important; }
+            .doc-table { margin-bottom: 15px !important; margin-top: 5px !important; }
+            .doc-table th, .doc-table td { padding: 6px !important; font-size: 10pt !important; line-height: 1.3 !important; }
+            .doc-body p { font-size: 11pt !important; line-height: 1.4 !important; margin: 5px 0 !important; }
+            .doc-sign { font-size: 11pt !important; }
             
             .diploma-print-area { width: 100% !important; height: 1050px !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
             .editable-line { border-bottom: none !important; }
@@ -194,7 +189,7 @@
         body.export-mode .instruction-box h4 { margin: 0 0 3px 0 !important; font-size: 13px !important; }
         body.export-mode .instruction-box li { margin-bottom: 2px !important; }
         
-        /* 🌟 画像化時の書類レイアウト強制指定 */
+        /* 画像化時の書類レイアウト強制指定（こちらは画面描画用なのでpx指定のままでOK） */
         body.export-mode .doc-page { width: 794px !important; height: 1123px !important; max-height: 1123px !important; padding: 40px 50px !important; box-sizing: border-box !important; border: none !important; box-shadow: none !important; margin: 0 !important; background: white !important; overflow: hidden !important;}
         body.export-mode .doc-table th, body.export-mode .doc-table td { padding: 8px !important; font-size: 12px !important; }
         
@@ -643,7 +638,6 @@
             container.innerHTML = '';
 
             try {
-                // iPadのレイアウト再計算を確実に待つ
                 await new Promise(resolve => setTimeout(resolve, 600));
 
                 let targets = [];
@@ -657,8 +651,6 @@
 
                 for (let i = 0; i < targets.length; i++) {
                     const target = targets[i];
-                    
-                    // 🌟 処理対象を確実に見つけるための目印をつける
                     target.setAttribute('data-export-target', 'true');
 
                     const canvas = await html2canvas(target, { 
@@ -666,7 +658,6 @@
                         useCORS: true,
                         backgroundColor: '#ffffff',
                         windowWidth: 794,
-                        // 🌟 ここが最強の解決策：仮想キャンバス内で強制的にA4の枠にはめ直す
                         onclone: function(clonedDoc) {
                             const clonedTarget = clonedDoc.querySelector('[data-export-target="true"]');
                             if (clonedTarget) {
@@ -677,7 +668,6 @@
                                 clonedTarget.style.transform = 'none';
                                 clonedTarget.style.maxWidth = 'none';
 
-                                // もし書類タブなら、完全にA4サイズ（794x1123）に枠を固定してしまう
                                 if (clonedTarget.classList.contains('doc-page')) {
                                     clonedTarget.style.width = '794px';
                                     clonedTarget.style.height = '1123px';
@@ -687,7 +677,6 @@
                         }
                     });
                     
-                    // 目印を外す
                     target.removeAttribute('data-export-target');
 
                     const imgElement = document.createElement('img');
