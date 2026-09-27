@@ -67,26 +67,27 @@
         .instruction-box ul { margin: 0; padding-left: 20px; }
         .instruction-box li { margin-bottom: 5px; }
 
+        /* 書類画面ベース */
         .doc-wrapper { background-color: var(--bg-color); padding: 0; box-shadow: none; }
-        .doc-page { font-family: "MS Mincho", "ＭＳ 明朝", serif; background: white; margin: 0 auto 30px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #ccc; max-width: 800px; box-sizing: border-box; padding: 20px 40px 40px 40px; color: #000; line-height: 1.6; font-size: 15px; transition: opacity 0.3s; }
+        .doc-page { font-family: "MS Mincho", "ＭＳ 明朝", serif; background: white; margin: 0 auto 30px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 1px solid #ccc; max-width: 800px; box-sizing: border-box; padding: 30px 40px; color: #000; line-height: 1.5; font-size: 14px; transition: opacity 0.3s; }
         .doc-page.exclude-print { opacity: 0.4; }
-        .print-control { text-align: right; padding-bottom: 15px; margin-bottom: 20px; border-bottom: 1px dashed #ccc; font-family: sans-serif; }
-        .print-control label { cursor: pointer; font-weight: bold; font-size: 16px; color: #333; }
-        .print-control input { transform: scale(1.5); margin-right: 10px; cursor: pointer; }
-        .doc-title { text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 20px; letter-spacing: 5px; }
+        .print-control { text-align: right; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px dashed #ccc; font-family: sans-serif; }
+        .print-control label { cursor: pointer; font-weight: bold; font-size: 14px; color: #333; }
+        .print-control input { transform: scale(1.3); margin-right: 8px; cursor: pointer; }
+        .doc-title { text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px; letter-spacing: 5px; }
         .doc-title-line { text-decoration: underline; text-underline-offset: 4px; }
-        .doc-to { font-size: 16px; margin-bottom: 20px; }
+        .doc-to { font-size: 15px; margin-bottom: 15px; }
         .doc-date { text-align: right; margin-bottom: 10px; }
-        .doc-body { margin-bottom: 30px; }
-        .doc-body p { margin: 10px 0; }
+        .doc-body { margin-bottom: 20px; }
+        .doc-body p { margin: 8px 0; }
         .fill-blank { display: inline-block; min-width: 40px; border-bottom: 1px solid #000; text-align: center; padding: 0 5px; cursor: text; min-height: 20px; }
-        .doc-sign { margin-left: auto; max-width: 450px; font-size: 15px; }
-        .doc-sign-row { display: flex; margin-bottom: 15px; align-items: flex-end; }
+        .doc-sign { margin-left: auto; max-width: 450px; font-size: 14px; }
+        .doc-sign-row { display: flex; margin-bottom: 10px; align-items: flex-end; }
         .doc-sign-label { width: 120px; }
-        .doc-sign-input { flex: 1; border-bottom: 1px solid #000; min-height: 24px; padding-left: 5px; cursor: text; }
-        .doc-table { border-collapse: collapse; width: 100%; margin-bottom: 30px; margin-top: 15px;}
-        .doc-table th, .doc-table td { border: 1px solid #000; padding: 12px 10px; vertical-align: middle; }
-        .doc-table th { width: 25%; text-align: center; font-weight: normal; }
+        .doc-sign-input { flex: 1; border-bottom: 1px solid #000; min-height: 20px; padding-left: 5px; cursor: text; }
+        .doc-table { border-collapse: collapse; width: 100%; margin-bottom: 20px; margin-top: 10px;}
+        .doc-table th, .doc-table td { border: 1px solid #000; padding: 8px; vertical-align: middle; }
+        .doc-table th { width: 25%; text-align: center; font-weight: normal; background: #f9f9f9; }
 
         .diploma-print-area { font-family: 'Yuji Syuku', "HGP行書体", "HG行書体", serif; width: 210mm; height: 297mm; margin: 0 auto; position: relative; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.2); border: 1px dashed #ccc; overflow: hidden; color: #000; }
         .brush-text { position: absolute; white-space: nowrap; font-weight: bold; }
@@ -107,43 +108,56 @@
             
             .header, .tabs, .controls, .action-btn, .print-control, .exclude-print { display: none !important; }
             .tab-content { display: none !important; }
-            
             .tab-content.active { display: block !important; width: 100% !important; padding: 10px 20px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; }
             
             table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #333 !important; page-break-inside: avoid !important; }
-
-            /* 🌟 はみ出しストッパー（確実な制限） */
             #sendo, #seiso { overflow: hidden !important; }
 
-            /* 🌟 鮮度チェック表：高さをさらに安全な 750px に縮小（太線は維持） */
+            /* 鮮度チェック表 */
             #sendoTable { height: 750px !important; max-height: 750px !important; margin: 0 auto !important; }
             #sendoTable .title-cell { height: 20px !important; font-size: 14px !important; padding: 0 !important; line-height: 20px !important; border-bottom: none !important; }
             #sendoTable th { height: 13px !important; font-size: 10px !important; padding: 0 !important; line-height: 13px !important; border: 1px solid #aaa !important; background: #f0f0f0 !important; }
             #sendoTable td { height: 13px !important; font-size: 10px !important; padding: 0 1px !important; line-height: 13px !important; white-space: nowrap !important; overflow: hidden !important; border: 1px solid #aaa !important; }
-
             #sendoTable th:nth-child(3n), #sendoTable td:nth-child(3n) { border-right: 2px solid #333 !important; }
             #sendoTable thead tr:last-child th { border-bottom: 2px solid #333 !important; }
             #sendoBody tr:nth-child(5n) td { border-bottom: 2px solid #333 !important; }
 
-            /* 🌟 清掃表：絶対に2ページ目に行かないように高さを 700px まで縮小 */
+            /* ゴンドラ清掃表 */
             #seisoTable { height: 700px !important; max-height: 700px !important; margin: 0 auto !important; }
             #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #888 !important; }
-            
             #seisoTable td.no-border { border: none !important; }
             #seisoTable td.bg-aisle { border: 1px dashed #ddd !important; }
-
-            /* 各行の高さを限界までコンパクトに */
             .gondola-row { height: 40px !important; }
             .gondola-row-tall { height: 55px !important; }
             .gondola-row-short { height: 25px !important; }
-            
-            /* 手順ボックスも極限までコンパクトに */
             .instruction-box { padding: 5px 10px !important; font-size: 11px !important; margin-top: 5px !important; border: 2px solid #000 !important; background: #fff !important; line-height: 1.3 !important; }
             .instruction-box h4 { margin: 0 0 3px 0 !important; font-size: 13px !important; }
             .instruction-box li { margin-bottom: 2px !important; }
 
-            /* 書類・証書 */
-            .doc-page { width: 100% !important; padding: 30px 40px !important; margin: 0 !important; box-sizing: border-box !important; page-break-after: always; border: none !important; box-shadow: none !important; }
+            /* 🌟 入社手続書類：確実に1ページに収めるための強力な制限 */
+            .doc-page { 
+                width: 100% !important; 
+                height: 980px !important; /* A4物理限界を絶対に超えさせない */
+                max-height: 980px !important; 
+                padding: 15px 30px !important; /* 余白を削る */
+                margin: 0 auto !important; 
+                box-sizing: border-box !important; 
+                page-break-after: always !important; 
+                border: none !important; 
+                box-shadow: none !important; 
+                overflow: hidden !important; /* はみ出しをカット */
+            }
+            .doc-title { font-size: 16px !important; margin-bottom: 10px !important; }
+            .doc-table { margin-bottom: 10px !important; margin-top: 5px !important; }
+            .doc-table th, .doc-table td { 
+                padding: 4px 6px !important; /* 表の余白を極限まで削る */
+                font-size: 10px !important; /* テキストの折り返しを防ぐ */
+                line-height: 1.2 !important; 
+            }
+            .doc-body p { font-size: 12px !important; line-height: 1.3 !important; margin: 4px 0 !important; }
+            .doc-sign { font-size: 11px !important; }
+            .doc-sign-row { margin-bottom: 5px !important; }
+            
             .diploma-print-area { width: 100% !important; height: 1050px !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
             .editable-line { border-bottom: none !important; }
         }
@@ -151,18 +165,15 @@
         /* =========================================
            4. 画像化モード用 CSS（ズレ・見切れを絶対に防ぐ）
         ========================================= */
-        body.export-mode { width: 794px !important; background: white !important; margin: 0 !important; padding: 0 !important; }
+        body.export-mode { width: 100% !important; background: white !important; margin: 0 !important; padding: 0 !important; }
         body.export-mode .header, body.export-mode .tabs, body.export-mode .controls, body.export-mode .action-btn, body.export-mode .print-control, body.export-mode .exclude-print { display: none !important; }
         body.export-mode .tab-content { display: none !important; }
         
-        /* 🌟 画像化時は、対象のタブを完全に左上(0,0)にロックしてズレを排除 */
         body.export-mode .tab-content.active { display: block !important; position: relative !important; top: 0 !important; left: 0 !important; width: 794px !important; padding: 15px !important; box-sizing: border-box !important; margin: 0 !important; border: none !important; box-shadow: none !important; transform: none !important; }
         
         body.export-mode table.op-table { width: 100% !important; min-width: 0 !important; max-width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; border: 2px solid #333 !important; }
-        
         body.export-mode #sendo, body.export-mode #seiso { overflow: visible !important; }
         
-        /* 画像化時も高さ縮小（安全圏） */
         body.export-mode #sendoTable { height: 750px !important; max-height: 750px !important; margin: 0 auto !important; }
         body.export-mode .title-cell { height: 20px !important; font-size: 14px !important; padding: 0 !important; line-height: 20px !important; border-bottom: none !important; }
         body.export-mode #sendoTable th { height: 13px !important; font-size: 10px !important; padding: 0 !important; line-height: 13px !important; border: 1px solid #aaa !important; background: #f0f0f0 !important; }
@@ -174,10 +185,8 @@
 
         body.export-mode #seisoTable { height: 700px !important; max-height: 700px !important; margin: 0 auto !important; }
         body.export-mode #seisoTable td { height: auto !important; padding: 2px 4px !important; font-size: 11px !important; border: 1px solid #888 !important; }
-        
         body.export-mode #seisoTable td.no-border { border: none !important; }
         body.export-mode #seisoTable td.bg-aisle { border: 1px dashed #ddd !important; }
-
         body.export-mode .gondola-row { height: 40px !important; }
         body.export-mode .gondola-row-tall { height: 55px !important; }
         body.export-mode .gondola-row-short { height: 25px !important; }
@@ -185,8 +194,11 @@
         body.export-mode .instruction-box h4 { margin: 0 0 3px 0 !important; font-size: 13px !important; }
         body.export-mode .instruction-box li { margin-bottom: 2px !important; }
         
-        body.export-mode .doc-page { width: 794px !important; min-height: 1123px !important; padding: 40px !important; box-sizing: border-box !important; border: none !important; box-shadow: none !important; margin: 0 auto !important; }
-        body.export-mode .diploma-print-area { width: 100% !important; height: 1083px !important; border: none !important; box-shadow: none !important; margin: 0 auto !important; }
+        /* 🌟 画像化時の書類レイアウト強制指定 */
+        body.export-mode .doc-page { width: 794px !important; height: 1123px !important; max-height: 1123px !important; padding: 40px 50px !important; box-sizing: border-box !important; border: none !important; box-shadow: none !important; margin: 0 !important; background: white !important; overflow: hidden !important;}
+        body.export-mode .doc-table th, body.export-mode .doc-table td { padding: 8px !important; font-size: 12px !important; }
+        
+        body.export-mode .diploma-print-area { width: 100% !important; height: 1083px !important; border: none !important; box-shadow: none !important; margin: 0 !important; }
     </style>
 </head>
 <body>
@@ -341,7 +353,7 @@
         <div class="doc-page">
             <div class="print-control"><label><input type="checkbox" checked onchange="togglePrint(this)"> 🖨️ この書類を印刷する</label></div>
             <div class="doc-title">労 働 条 件 通 知 書</div>
-            <div style="font-size: 18px; margin-bottom: 20px;">
+            <div style="font-size: 16px; margin-bottom: 15px;">
                 <span class="fill-blank" contenteditable="true" data-key="doc1_emp_name_top" style="min-width: 150px; display: inline-block;"></span> 殿
             </div>
             
@@ -359,7 +371,7 @@
                 <tr><th>就業時間</th><td>シフト表による<br>※ただし、業務上就業時間・休憩時間を変更する場合がある</td></tr>
                 <tr><th>所定外労働</th><td>有</td></tr>
                 <tr><th>休日及び休暇</th><td>シフト制、その他会社が定めた日<br>年次有給休暇あり ※就業規則の定めによる</td></tr>
-                <tr><th>賃金</th><td>1. 基本賃金　時給 <span class="fill-blank" contenteditable="true" data-key="doc1_wage" style="min-width: 60px;"></span> 月給 <span class="fill-blank" contenteditable="true" data-key="doc1_wage_m" style="min-width: 60px;"></span> 円<br>2. 時間外手当　法定通り</td></tr>
+                <tr><th>賃金</th><td>1. 基本賃金　時給 <span class="fill-blank" contenteditable="true" data-key="doc1_wage" style="min-width: 50px;"></span> 月給 <span class="fill-blank" contenteditable="true" data-key="doc1_wage_m" style="min-width: 50px;"></span> 円<br>2. 時間外手当　法定通り</td></tr>
                 <tr><th>賃金の支払</th><td>毎月 <span class="fill-blank" contenteditable="true" data-key="doc1_pay_d1" style="min-width: 30px;">15</span> 日締切り、当月 <span class="fill-blank" contenteditable="true" data-key="doc1_pay_d2" style="min-width: 30px;">25</span> 日支払<br>賃金支払時に控除する費用(所得税、雇用保険、社会保険等)</td></tr>
                 <tr><th>賞与</th><td>無</td></tr>
                 <tr><th>退職金</th><td>無</td></tr>
@@ -367,15 +379,15 @@
                 <tr><th>その他</th><td>上記以外の労働条件の詳細については、就業規則または、関係諸法令を参考にその都度会社が取り決めるものとする。</td></tr>
             </table>
 
-            <div class="doc-date" style="text-align: right; margin-top: 10px; margin-bottom: 30px;">
+            <div class="doc-date" style="text-align: right; margin-top: 10px; margin-bottom: 20px;">
                 <span class="fill-blank" contenteditable="true" data-key="doc1_dy1" style="min-width: 40px;"></span> 年 <span class="fill-blank" contenteditable="true" data-key="doc1_dm1" style="min-width: 20px;"></span> 月 <span class="fill-blank" contenteditable="true" data-key="doc1_dd1" style="min-width: 20px;"></span> 日
             </div>
             
-            <div style="margin-left: auto; width: 450px; font-size: 16px; line-height: 2;">
+            <div style="margin-left: auto; width: 450px; font-size: 14px; line-height: 1.8;">
                 (使用者)<br>
-                <div style="display: flex; margin-top: 5px;"><div style="width: 90px;">所在地</div><div contenteditable="true" data-key="doc1_loc" style="flex: 1; border-bottom: 1px solid #000;">愛知県尾張旭市晴丘町池上125番1</div></div>
-                <div style="display: flex; margin-top: 5px;"><div style="width: 90px;">事業所名</div><div contenteditable="true" data-key="doc1_shop" style="flex: 1; border-bottom: 1px solid #000;">セブンイレブン尾張旭晴丘町池上店</div></div>
-                <div style="display: flex; margin-top: 5px;"><div style="width: 90px;">事業主氏名</div><div contenteditable="true" data-key="doc1_owner" style="flex: 1; border-bottom: 1px solid #000;">蟹江 明雄</div><span style="margin-left:15px;">印</span></div>
+                <div style="display: flex; margin-top: 3px;"><div style="width: 80px;">所在地</div><div contenteditable="true" data-key="doc1_loc" style="flex: 1; border-bottom: 1px solid #000;">愛知県尾張旭市晴丘町池上125番1</div></div>
+                <div style="display: flex; margin-top: 3px;"><div style="width: 80px;">事業所名</div><div contenteditable="true" data-key="doc1_shop" style="flex: 1; border-bottom: 1px solid #000;">セブンイレブン尾張旭晴丘町池上店</div></div>
+                <div style="display: flex; margin-top: 3px;"><div style="width: 80px;">事業主氏名</div><div contenteditable="true" data-key="doc1_owner" style="flex: 1; border-bottom: 1px solid #000;">蟹江 明雄</div><span style="margin-left:15px;">印</span></div>
             </div>
         </div>
 
@@ -447,7 +459,7 @@
                 </div>
             </div>
 
-            <div class="doc-body" style="line-height: 2.2; text-align: center;">
+            <div class="doc-body" style="line-height: 2.0; text-align: center;">
                 <p>
                     お世話になります。セブンイレブン尾張旭晴丘町池上店の蟹江と申します。<br>
                     この度は、大切なお子様を当店舗の従業員として採用させて頂きました。<br>
@@ -476,7 +488,7 @@
                 </p>
             </div>
             
-            <div style="text-align: right; margin-top: 50px; font-size: 16px;">
+            <div style="text-align: right; margin-top: 40px; font-size: 15px;">
                 セブンイレブン尾張旭晴丘町池上店<br><br><br><br>
             </div>
         </div>
@@ -624,17 +636,14 @@
             btnElement.innerHTML = "⏳ 画像化しています...";
             btnElement.disabled = true;
 
-            // 🌟 画面最上部へ移動し、iOSの座標ズレの要因を消す
             window.scrollTo(0, 0);
-
-            // 🌟 画像化用の一切の制限を解除したCSSを適用
             document.body.classList.add('export-mode');
             
             const container = document.getElementById('modalImageContainer');
             container.innerHTML = '';
 
             try {
-                // 🌟 Safariのレイアウト再計算を完全に待つため少し長めに待機
+                // iPadのレイアウト再計算を確実に待つ
                 await new Promise(resolve => setTimeout(resolve, 600));
 
                 let targets = [];
@@ -649,25 +658,38 @@
                 for (let i = 0; i < targets.length; i++) {
                     const target = targets[i];
                     
-                    // 🌟 見切れ（クリッピング）を絶対に防ぐ最強の設定
+                    // 🌟 処理対象を確実に見つけるための目印をつける
+                    target.setAttribute('data-export-target', 'true');
+
                     const canvas = await html2canvas(target, { 
                         scale: 2, 
                         useCORS: true,
                         backgroundColor: '#ffffff',
                         windowWidth: 794,
-                        // onclone: 撮影直前の「裏側の仮想画面」の配置を強制的に左上(0,0)にリセットする
+                        // 🌟 ここが最強の解決策：仮想キャンバス内で強制的にA4の枠にはめ直す
                         onclone: function(clonedDoc) {
-                            const clonedTarget = clonedDoc.getElementById(target.id) || clonedDoc.querySelector('.tab-content.active');
+                            const clonedTarget = clonedDoc.querySelector('[data-export-target="true"]');
                             if (clonedTarget) {
                                 clonedTarget.style.position = 'relative';
                                 clonedTarget.style.top = '0';
                                 clonedTarget.style.left = '0';
                                 clonedTarget.style.margin = '0';
                                 clonedTarget.style.transform = 'none';
+                                clonedTarget.style.maxWidth = 'none';
+
+                                // もし書類タブなら、完全にA4サイズ（794x1123）に枠を固定してしまう
+                                if (clonedTarget.classList.contains('doc-page')) {
+                                    clonedTarget.style.width = '794px';
+                                    clonedTarget.style.height = '1123px';
+                                    clonedTarget.style.maxHeight = '1123px';
+                                }
                             }
                         }
                     });
                     
+                    // 目印を外す
+                    target.removeAttribute('data-export-target');
+
                     const imgElement = document.createElement('img');
                     imgElement.src = canvas.toDataURL('image/png');
                     imgElement.style.maxWidth = '100%';
@@ -682,7 +704,6 @@
                 alert("画像化に失敗しました。");
                 console.error(err);
             } finally {
-                // 元の画面に戻す
                 document.body.classList.remove('export-mode');
                 btnElement.innerHTML = originalText;
                 btnElement.disabled = false;
